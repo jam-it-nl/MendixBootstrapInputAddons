@@ -12,31 +12,31 @@
 
     Documentation
     ========================
-    Describe your widget here.
+    This widget gives the possibility to use bootstrap input add-ons on normal fields.
 */
 
-// Required module list. Remove unnecessary modules, you can always get them back from the boilerplate.
 define([
     "dojo/_base/declare",
     "mxui/widget/_WidgetBase",
     "dijit/_TemplatedMixin",
 
-    "mxui/dom",
-    "dojo/dom",
-    "dojo/dom-prop",
-    "dojo/dom-geometry",
+    //"mxui/dom",
+    //"dojo/dom",
+    //"dojo/dom-prop",
+    //"dojo/dom-geometry",
     "dojo/dom-class",
     "dojo/dom-style",
     "dojo/dom-construct",
     "dojo/_base/array",
     "dojo/_base/lang",
-    "dojo/text",
+    //"dojo/text",
     "dojo/html",
     "dojo/_base/event",
 
     "BootstrapInputAddons/lib/jquery-1.11.2",
     "dojo/text!BootstrapInputAddons/widget/template/BootstrapInputAddons.html"
-], function (declare, _WidgetBase, _TemplatedMixin, dom, dojoDom, dojoProp, dojoGeometry, dojoClass, dojoStyle, dojoConstruct, dojoArray, dojoLang, dojoText, dojoHtml, dojoEvent, _jQuery, widgetTemplate) {
+//], function (declare, _WidgetBase, _TemplatedMixin, dom, dojoDom, dojoProp, dojoGeometry, dojoClass, dojoStyle, dojoConstruct, //dojoArray, dojoLang, dojoText, dojoHtml, dojoEvent, _jQuery, widgetTemplate) {
+], function (declare, _WidgetBase, _TemplatedMixin, dojoClass, dojoStyle, dojoConstruct, dojoArray, dojoLang, dojoHtml, dojoEvent, _jQuery, widgetTemplate) {
     "use strict";
 
     var $ = _jQuery.noConflict(true);
@@ -48,29 +48,35 @@ define([
 
         // DOM elements
         inputNodes: null,
-        colorInputNode: null,
-        labelNode: null,
+        inputNode: null,
         formGroupNode: null,
 
         // Parameters configured in the Modeler.
         showLabel: "",
         labelCaption: "",
+        showLeftAddon: "",
+        leftAddonCaption: "",
+        showRightAddon: "",
+        rightAddonCaption: "",
         isRequired: "",
         requiredMessage: "",
         mfToExecute: "",
         messageString: "",
-        backgroundColor: "",
+        fieldAttribute: "",
 
         // Internal variables. Non-primitives created in the prototype are shared between all widget instances.
         _formValidateListener: null,
         _handles: null,
         _contextObj: null,
         _alertDiv: null,
+        _leftAddonSpan: null,
+        _rightAddonSpan: null,
+        _labelNode: null,
 
         // dojo.declare.constructor is called to construct the widget instance. Implement to initialize non-primitive properties.
         constructor: function () {
             // Uncomment the following line to enable debug messages
-            logger.level(logger.DEBUG);
+            //logger.level(logger.DEBUG);
             logger.debug(this.id + ".constructor");
             this._handles = [];
         },
@@ -126,10 +132,10 @@ define([
         _setupEvents: function () {
             logger.debug(this.id + "._setupEvents");
 
-            this.connect(this.colorInputNode, "change", function (e) {
+            this.connect(this.inputNode, "change", function (e) {
                 // Check for required
                 if (this._isValid()) {
-                    this._contextObj.set(this.backgroundColor, this.colorInputNode.value);
+                    this._contextObj.set(this.fieldAttribute, this.inputNode.value);
                 } else {
                     this._addValidation(this.requiredMessage);
                 }
@@ -139,20 +145,44 @@ define([
         // Rerender the interface.
         _updateRendering: function () {
             logger.debug(this.id + "._updateRendering");
-            this.colorInputNode.disabled = this.readOnly;
-
+            this.inputNode.disabled = this.readOnly;
+            
+            // Show label
             if (this.showLabel) {
-                dojoHtml.set(this.labelNode, this.labelCaption);
-            } else {
-                dojoConstruct.destroy(this.labelNode);
+                dojoConstruct.destroy(this._labelNode);
+                this._labelNode = dojoConstruct.create("label", {
+                    "class": "control-label",
+                    "innerHTML": this.labelCaption
+                });
+                dojoConstruct.place(this._labelNode, this.formGroupNode, "first");
+            }
+
+            // Show left add-on
+            if (this.showLeftAddon) {
+                dojoConstruct.destroy(this._leftAddonSpan);
+                this._leftAddonSpan = dojoConstruct.create("span", {
+                    "class": "input-group-addon",
+                    "innerHTML": this.leftAddonCaption
+                });
+                dojoConstruct.place(this._leftAddonSpan, this.inputNodes, "first");
+            }
+            
+            // Show right add-on
+            if (this.showRightAddon) {
+                dojoConstruct.destroy(this._rightAddonSpan);
+                this._rightAddonSpan = dojoConstruct.create("span", {
+                    "class": "input-group-addon",
+                    "innerHTML": this.rightAddonCaption
+                });
+                dojoConstruct.place(this._rightAddonSpan, this.inputNodes, "last");
             }
 
             if (this._contextObj !== null) {
                 dojoStyle.set(this.domNode, "display", "block");
 
-                var colorValue = this._contextObj.get(this.backgroundColor);
+                var colorValue = this._contextObj.get(this.fieldAttribute);
 
-                this.colorInputNode.value = colorValue;
+                this.inputNode.value = colorValue;
             } else {
                 dojoStyle.set(this.domNode, "display", "none");
             }
@@ -167,13 +197,13 @@ define([
             this._clearValidations();
 
             var validation = validations[0],
-                message = validation.getReasonByAttribute(this.backgroundColor);
+                message = validation.getReasonByAttribute(this.fieldAttribute);
 
             if (this.readOnly) {
-                validation.removeAttribute(this.backgroundColor);
+                validation.removeAttribute(this.fieldAttribute);
             } else if (message) {
                 this._addValidation(message);
-                validation.removeAttribute(this.backgroundColor);
+                validation.removeAttribute(this.fieldAttribute);
             }
         },
 
@@ -199,11 +229,11 @@ define([
             dojoConstruct.place(this._alertDiv, this.formGroupNode, "last");
             dojoClass.add(this.formGroupNode, "has-error");
         },
-        
+
         // Check if validates
         _isValid: function () {
             logger.debug(this.id + "._isValid");
-            return !(this.isRequired && (!this.colorInputNode.value || 0 === this.colorInputNode.value.trim().length));
+            return !(this.isRequired && (!this.inputNode.value || 0 === this.inputNode.value.trim().length));
         },
 
         // Add a validation.
@@ -231,7 +261,7 @@ define([
             if (this._contextObj) {
                 this._formValidateListener = this.mxform.listen("validate", dojoLang.hitch(this, function (callback, error) {
                     logger.debug(this.id + ".validate");
-                    if (this._isValid()){
+                    if (this._isValid()) {
                         callback();
                     }
                 }));
@@ -245,7 +275,7 @@ define([
 
                 var attrHandle = this.subscribe({
                     guid: this._contextObj.getGuid(),
-                    attr: this.backgroundColor,
+                    attr: this.fieldAttribute,
                     callback: dojoLang.hitch(this, function (guid, attr, attrValue) {
                         this._updateRendering();
                     })

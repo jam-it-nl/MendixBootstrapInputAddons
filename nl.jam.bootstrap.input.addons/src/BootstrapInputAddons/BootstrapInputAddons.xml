@@ -6,6 +6,25 @@
     <icon />
 
     <properties>
+        <property key="fieldAttribute" type="attribute">
+            <caption>Attribute (path)</caption>
+            <category>Appearance</category>
+            <description/>
+            <attributeTypes>
+                <attributeType name="String" />
+                <attributeType name="AutoNumber" />
+                <attributeType name="Binary" />
+                <attributeType name="Boolean" />
+                <attributeType name="Currency" />
+                <attributeType name="DateTime" />
+                <attributeType name="Decimal" />
+                <attributeType name="Enum" />
+                <attributeType name="Float" />
+                <attributeType name="HashString" />
+                <attributeType name="Integer" />
+                <attributeType name="Long" />
+            </attributeTypes>
+        </property>
         <property key="isRequired" type="boolean" required="true" defaultValue="false">
             <caption>Required</caption>
             <category>Appearance</category>
@@ -26,24 +45,25 @@
             <category>Appearance</category>
             <description/>
         </property>
-        <property key="backgroundColor" type="attribute">
-            <caption>Background Color</caption>
+        <property key="showLeftAddon" type="boolean" required="true" defaultValue="false">
+            <caption>Show left add-on</caption>
             <category>Appearance</category>
-            <description>The background color of the widget.</description>
-            <attributeTypes>
-                <attributeType name="String" />
-            </attributeTypes>
+            <description/>
         </property>
-        <property key="messageString" type="string" required="true" defaultValue="">
-            <caption>Message</caption>
+        <property key="leftAddonCaption" type="string" required="false" defaultValue="">
+            <caption>Left add-on caption</caption>
             <category>Appearance</category>
-            <description>The message visible within the widget.</description>
+            <description/>
         </property>
-        <property key="mfToExecute" type="microflow" required="false" defaultValue="">
-            <caption>Microflow</caption>
-            <category>Behavior</category>
-            <description>The microflow to execute on click.</description>
-            <returnType type="Boolean" />
+        <property key="showRightAddon" type="boolean" required="true" defaultValue="false">
+            <caption>Show right add-on</caption>
+            <category>Appearance</category>
+            <description/>
+        </property>
+        <property key="rightAddonCaption" type="string" required="false" defaultValue="">
+            <caption>Right add-on caption</caption>
+            <category>Appearance</category>
+            <description/>
         </property>
     </properties>
 </widget>
