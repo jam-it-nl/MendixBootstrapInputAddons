@@ -13,3 +13,5 @@ To use the widget, place it in a Entity context (like a dataview) and configure 
 
 ## Limitations
 * Buttons, checkboxes, radiobuttons and dropdowns (as add-on) are not yet implemented
+
+For any request or bug please create an issue at https://github.com/JAM-IT-NL/MendixBootstrapInputAddons
