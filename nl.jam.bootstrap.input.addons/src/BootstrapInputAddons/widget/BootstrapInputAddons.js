@@ -20,22 +20,16 @@ define([
     "mxui/widget/_WidgetBase",
     "dijit/_TemplatedMixin",
 
-    //"mxui/dom",
-    //"dojo/dom",
-    //"dojo/dom-prop",
-    //"dojo/dom-geometry",
     "dojo/dom-class",
     "dojo/dom-style",
     "dojo/dom-construct",
     "dojo/_base/array",
     "dojo/_base/lang",
-    //"dojo/text",
     "dojo/html",
     "dojo/_base/event",
 
     "BootstrapInputAddons/lib/jquery-1.11.2",
     "dojo/text!BootstrapInputAddons/widget/template/BootstrapInputAddons.html"
-//], function (declare, _WidgetBase, _TemplatedMixin, dom, dojoDom, dojoProp, dojoGeometry, dojoClass, dojoStyle, dojoConstruct, //dojoArray, dojoLang, dojoText, dojoHtml, dojoEvent, _jQuery, widgetTemplate) {
 ], function (declare, _WidgetBase, _TemplatedMixin, dojoClass, dojoStyle, dojoConstruct, dojoArray, dojoLang, dojoHtml, dojoEvent, _jQuery, widgetTemplate) {
     "use strict";
 
@@ -118,6 +112,9 @@ define([
         uninitialize: function () {
             logger.debug(this.id + ".uninitialize");
             // Clean up listeners, helper objects, etc. There is no need to remove listeners added with this.connect / this.subscribe / this.own.
+            if (this._formValidateListener) {
+                this.mxform.unlisten(this._formValidateListener);
+            }
         },
 
         // We want to stop events on a mobile device
