@@ -1,6 +1,6 @@
 # Mendix Bootstrap Input Addons Widget
 
-This widget extends form controls by adding text on either side of textual input's (as described on http://getbootstrap.com/components/#input-groups).
+This widget extends form controls by adding text on either side of textual input's (as described [here](http://getbootstrap.com/components/#input-groups)).
 
 This would be useful when working with constant values that always apply on a field, for example the '€' symbol when working with currencies.
 
@@ -14,4 +14,4 @@ To use the widget, place it in a Entity context (like a dataview) and configure 
 ## Limitations
 * Buttons, checkboxes, radiobuttons and dropdowns (as add-on) are not yet implemented
 
-For any request or bug please create an issue at https://github.com/JAM-IT-NL/MendixBootstrapInputAddons
+For any request or bug please create an issue at [GitHub](https://github.com/JAM-IT-NL/MendixBootstrapInputAddons).
