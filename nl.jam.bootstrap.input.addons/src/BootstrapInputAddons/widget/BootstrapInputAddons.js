@@ -4,7 +4,7 @@
     ========================
 
     @file      : BootstrapInputAddons.js
-    @version   : 1.0.1
+    @version   : 1.0.2
     @author    : Martijn Raats
     @date      : Mon, 25 Apr 2016 09:29:56 GMT
     @copyright : JAM-IT B.V.
@@ -54,6 +54,10 @@ define([
         mfToExecute: "",
         messageString: "",
         fieldAttribute: "",
+
+        onChange: "",
+        onEnter: "",
+        onLeave: "",
 
         // Internal variables. Non-primitives created in the prototype are shared between all widget instances.
         _formValidateListener: null,
@@ -127,12 +131,15 @@ define([
             logger.debug(this.id + "._setupEvents");
 
             this.connect(this.inputNode, "change", function (e) {
-                // Check for required
-                if (this._isValid()) {
-                    this._contextObj.set(this.fieldAttribute, this.inputNode.value);
-                } else {
-                    this._addValidation(this.requiredMessage);
-                }
+                this._onChange();
+            });
+            
+            this.connect(this.inputNode, "focus", function (e) {
+                this._onEnter();
+            });
+            
+            this.connect(this.inputNode, "blur", function (e) {
+                this._onLeave();
             });
         },
 
@@ -140,7 +147,7 @@ define([
         _updateRendering: function () {
             logger.debug(this.id + "._updateRendering");
             this.inputNode.disabled = this.readOnly;
-            
+
             // Show label
             if (this.showLabel) {
                 dojoConstruct.destroy(this._labelNode);
@@ -160,7 +167,7 @@ define([
                 });
                 dojoConstruct.place(this._leftAddonSpan, this.inputNodes, "first");
             }
-            
+
             // Show right add-on
             if (this.showRightAddon) {
                 dojoConstruct.destroy(this._rightAddonSpan);
@@ -234,6 +241,58 @@ define([
         _addValidation: function (message) {
             logger.debug(this.id + "._addValidation");
             this._showError(message);
+        },
+
+        // FieldEvent: onChange
+        _onChange: function () {
+            logger.debug(this.id + "._onChange");
+            // Check for required
+            if (this._isValid()) {
+                // Set attribute value
+                this._contextObj.set(this.fieldAttribute, this.inputNode.value);
+
+                // Call "on change" microflow
+                this._callMicroflow(this.onChange);
+            } else {
+                this._addValidation(this.requiredMessage);
+            }
+        },
+
+        // FieldEvent: onEnter
+        _onEnter: function () {
+            logger.debug(this.id + "._onEnter");
+            // Call "on change" microflow
+            this._callMicroflow(this.onEnter);
+        },
+        
+        // FieldEvent: onLeave
+        _onLeave: function () {
+            logger.debug(this.id + "._onLeave");
+            // Call "on change" microflow
+            this._callMicroflow(this.onLeave);
+        },
+
+        // Call MicroFlow
+        _callMicroflow: function (microflow) {
+            logger.debug(this.id + "._callMicroflow");
+            if (microflow !== "") {
+                mx.data.action({
+                    params: {
+                        applyto: "selection",
+                        actionname: microflow,
+                        guids: [this._contextObj.getGuid()]
+                    },
+                    store: {
+                        caller: this.mxform
+                    },
+                    callback: function (obj) {
+                        // Is called wgen all is ok
+                    },
+                    error: dojoLang.hitch(this, function (error) {
+                        logger.error(this.id + ": An error occurred while executing microflow: " + error.description);
+                    })
+                }, this);
+            }
         },
 
         // Reset subscriptions.

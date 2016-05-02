@@ -65,6 +65,26 @@
             <category>Appearance</category>
             <description/>
         </property>
+        
+        <property key="onChange" type="microflow" required="false" defaultValue="">
+            <caption>On Change</caption>
+            <category>Behavior</category>
+            <description/>
+            <returnType type="Void" />
+        </property>
+        <property key="onEnter" type="microflow" required="false" defaultValue="">
+            <caption>On Enter</caption>
+            <category>Behavior</category>
+            <description/>
+            <returnType type="Void" />
+        </property>
+        <property key="onLeave" type="microflow" required="false" defaultValue="">
+            <caption>On Leave</caption>
+            <category>Behavior</category>
+            <description/>
+            <returnType type="Void" />
+        </property>
+        
     </properties>
 </widget>
 
