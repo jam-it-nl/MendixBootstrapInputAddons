@@ -74,7 +74,7 @@ define([
         // dojo.declare.constructor is called to construct the widget instance. Implement to initialize non-primitive properties.
         constructor: function () {
             // Uncomment the following line to enable debug messages
-            logger.level(logger.DEBUG);
+            // logger.level(logger.DEBUG);
             logger.debug(this.id + ".constructor");
             this._handles = [];
         },
