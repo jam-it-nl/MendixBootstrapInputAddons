@@ -4,7 +4,7 @@
     ========================
 
     @file      : BootstrapInputAddons.js
-    @version   : 1.0.0
+    @version   : 1.0.1
     @author    : Martijn Raats
     @date      : Mon, 25 Apr 2016 09:29:56 GMT
     @copyright : JAM-IT B.V.
@@ -28,12 +28,9 @@ define([
     "dojo/html",
     "dojo/_base/event",
 
-    "BootstrapInputAddons/lib/jquery-1.11.2",
     "dojo/text!BootstrapInputAddons/widget/template/BootstrapInputAddons.html"
-], function (declare, _WidgetBase, _TemplatedMixin, dojoClass, dojoStyle, dojoConstruct, dojoArray, dojoLang, dojoHtml, dojoEvent, _jQuery, widgetTemplate) {
+], function (declare, _WidgetBase, _TemplatedMixin, dojoClass, dojoStyle, dojoConstruct, dojoArray, dojoLang, dojoHtml, dojoEvent, widgetTemplate) {
     "use strict";
-
-    var $ = _jQuery.noConflict(true);
 
     // Declare widget's prototype.
     return declare("BootstrapInputAddons.widget.BootstrapInputAddons", [_WidgetBase, _TemplatedMixin], {
