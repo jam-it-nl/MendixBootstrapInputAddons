@@ -44,6 +44,8 @@ define([
 
         // Parameters configured in the Modeler.
         visibilityAttribute: "",
+        editable: "",
+        editableAttribute: "",
         showLabel: "",
         labelCaption: "",
         showLeftAddon: "",
@@ -72,7 +74,7 @@ define([
         // dojo.declare.constructor is called to construct the widget instance. Implement to initialize non-primitive properties.
         constructor: function () {
             // Uncomment the following line to enable debug messages
-            // logger.level(logger.DEBUG);
+            logger.level(logger.DEBUG);
             logger.debug(this.id + ".constructor");
             this._handles = [];
         },
@@ -147,51 +149,75 @@ define([
         // Rerender the interface.
         _updateRendering: function () {
             logger.debug(this.id + "._updateRendering");
-            
+
             if (this._isVisible()) {
                 dojoStyle.set(this.domNode, "display", "block");
+                
+                var value = this._contextObj.get(this.fieldAttribute);            
+                this.inputNode.value = value;
 
-                var colorValue = this._contextObj.get(this.fieldAttribute);
+                this._addLabel();
+                this._addLeftAddon();
+                this._addRightAddon();
 
-                this.inputNode.value = colorValue;
-
-                this.inputNode.disabled = this.readOnly;
-
-                // Show label
-                if (this.showLabel) {
-                    dojoConstruct.destroy(this._labelNode);
-                    this._labelNode = dojoConstruct.create("label", {
-                        "class": "control-label",
-                        "innerHTML": this.labelCaption
-                    });
-                    dojoConstruct.place(this._labelNode, this.formGroupNode, "first");
+                if (!this._isEditable()) {
+                    this._setReadOnlyValue(value);
                 }
 
-                // Show left add-on
-                if (this.showLeftAddon) {
-                    dojoConstruct.destroy(this._leftAddonSpan);
-                    this._leftAddonSpan = dojoConstruct.create("span", {
-                        "class": "input-group-addon",
-                        "innerHTML": this.leftAddonCaption
-                    });
-                    dojoConstruct.place(this._leftAddonSpan, this.inputNodes, "first");
-                }
-
-                // Show right add-on
-                if (this.showRightAddon) {
-                    dojoConstruct.destroy(this._rightAddonSpan);
-                    this._rightAddonSpan = dojoConstruct.create("span", {
-                        "class": "input-group-addon",
-                        "innerHTML": this.rightAddonCaption
-                    });
-                    dojoConstruct.place(this._rightAddonSpan, this.inputNodes, "last");
-                }
             } else {
                 dojoStyle.set(this.domNode, "display", "none");
             }
 
             // Important to clear all validations!
             this._clearValidations();
+        },
+
+        _addLabel: function () {
+            if (this.showLabel) {
+                dojoConstruct.destroy(this._labelNode);
+                this._labelNode = dojoConstruct.create("label", {
+                    "class": "control-label",
+                    "innerHTML": this.labelCaption
+                });
+                dojoConstruct.place(this._labelNode, this.formGroupNode, "first");
+            }
+        },
+
+        _addLeftAddon: function () {
+            if (this.showLeftAddon && this._isEditable()) {
+                dojoConstruct.destroy(this._leftAddonSpan);
+                this._leftAddonSpan = dojoConstruct.create("span", {
+                    "class": "input-group-addon",
+                    "innerHTML": this.leftAddonCaption
+                });
+                dojoConstruct.place(this._leftAddonSpan, this.inputNodes, "first");
+            }
+        },
+
+        _addRightAddon: function () {
+            if (this.showRightAddon && this._isEditable()) {
+                dojoConstruct.destroy(this._rightAddonSpan);
+                this._rightAddonSpan = dojoConstruct.create("span", {
+                    "class": "input-group-addon",
+                    "innerHTML": this.rightAddonCaption
+                });
+                dojoConstruct.place(this._rightAddonSpan, this.inputNodes, "last");
+            }
+        },
+
+        _setReadOnlyValue: function (value) {
+            if (this.showLabel) {
+                var readOnlyField = dojoConstruct.create("p", {
+                    "class": "form-control-static",
+                    "innerHTML": value
+                });
+                dojoConstruct.place(readOnlyField, this.inputNodes, "only");
+            } else {
+                var readOnlyField = dojoConstruct.create("label", {
+                    "innerHTML": value
+                });
+                dojoConstruct.place(readOnlyField, this.domNode, "only");
+            }
         },
 
         // Handle validations.
@@ -202,9 +228,7 @@ define([
             var validation = validations[0],
                 message = validation.getReasonByAttribute(this.fieldAttribute);
 
-            if (this.readOnly) {
-                validation.removeAttribute(this.fieldAttribute);
-            } else if (message) {
+            if (message) {
                 this._addValidation(message);
                 validation.removeAttribute(this.fieldAttribute);
             }
@@ -236,7 +260,18 @@ define([
         // Check if validates
         _isValid: function () {
             logger.debug(this.id + "._isValid");
-            return !(this.isRequired && (!this.inputNode.value || 0 === this.inputNode.value.trim().length));
+
+            if (this._isEditable() && this.isRequired) {
+                if (this.inputNode) {
+                    if (!this.inputNode.value || 0 === this.inputNode.value.trim().length) {
+                        logger.debug(this.id + "false");
+                        return false;
+                    }
+                }
+            }
+
+            logger.debug(this.id + "true");
+            return true;
         },
 
         // Add a validation.
@@ -296,9 +331,25 @@ define([
                 }, this);
             }
         },
-        
-        _isVisible: function(){
-          return (this._contextObj !== null && this._contextObj.get(this.visibilityAttribute) !== false);  
+
+        _isVisible: function () {
+            return (this._contextObj !== null && this._contextObj.get(this.visibilityAttribute) !== false);
+        },
+
+        _isEditable: function () {
+            switch (this.editable) {
+            case "default":
+                return !this.readOnly;
+            case "never":
+                return false;
+            case "conditionally":
+                if (this._contextObj !== null) {
+                    return this._contextObj.get(this.editableAttribute);
+                }
+            }
+
+            return false;
+
         },
 
         // Reset subscriptions.

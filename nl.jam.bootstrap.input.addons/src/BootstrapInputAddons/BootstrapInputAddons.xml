@@ -35,6 +35,25 @@
             </attributeTypes>
         </property>
         
+        <property key="editable" type="enumeration" defaultValue="default">
+          <caption>Editable</caption>
+          <category>Appearance</category>
+          <description/>
+          <enumerationValues>
+            <enumerationValue key="default">Default</enumerationValue>
+            <enumerationValue key="never">Never</enumerationValue>
+            <enumerationValue key="conditionally">Conditionally</enumerationValue>
+          </enumerationValues>
+        </property>
+        <property key="editableAttribute" required="false" type="attribute">
+            <caption>Editable condition</caption>
+            <category>Appearance</category>
+            <description>Make field editable when condition equals true</description>
+            <attributeTypes>
+                <attributeType name="Boolean" />
+            </attributeTypes>
+        </property>
+        
         <property key="isRequired" type="boolean" required="true" defaultValue="false">
             <caption>Required</caption>
             <category>Appearance</category>
