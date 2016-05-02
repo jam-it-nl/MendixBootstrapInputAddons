@@ -43,6 +43,7 @@ define([
         formGroupNode: null,
 
         // Parameters configured in the Modeler.
+        visibilityAttribute: "",
         showLabel: "",
         labelCaption: "",
         showLeftAddon: "",
@@ -71,7 +72,7 @@ define([
         // dojo.declare.constructor is called to construct the widget instance. Implement to initialize non-primitive properties.
         constructor: function () {
             // Uncomment the following line to enable debug messages
-            //logger.level(logger.DEBUG);
+            // logger.level(logger.DEBUG);
             logger.debug(this.id + ".constructor");
             this._handles = [];
         },
@@ -133,11 +134,11 @@ define([
             this.connect(this.inputNode, "change", function (e) {
                 this._onChange();
             });
-            
+
             this.connect(this.inputNode, "focus", function (e) {
                 this._onEnter();
             });
-            
+
             this.connect(this.inputNode, "blur", function (e) {
                 this._onLeave();
             });
@@ -146,44 +147,45 @@ define([
         // Rerender the interface.
         _updateRendering: function () {
             logger.debug(this.id + "._updateRendering");
-            this.inputNode.disabled = this.readOnly;
-
-            // Show label
-            if (this.showLabel) {
-                dojoConstruct.destroy(this._labelNode);
-                this._labelNode = dojoConstruct.create("label", {
-                    "class": "control-label",
-                    "innerHTML": this.labelCaption
-                });
-                dojoConstruct.place(this._labelNode, this.formGroupNode, "first");
-            }
-
-            // Show left add-on
-            if (this.showLeftAddon) {
-                dojoConstruct.destroy(this._leftAddonSpan);
-                this._leftAddonSpan = dojoConstruct.create("span", {
-                    "class": "input-group-addon",
-                    "innerHTML": this.leftAddonCaption
-                });
-                dojoConstruct.place(this._leftAddonSpan, this.inputNodes, "first");
-            }
-
-            // Show right add-on
-            if (this.showRightAddon) {
-                dojoConstruct.destroy(this._rightAddonSpan);
-                this._rightAddonSpan = dojoConstruct.create("span", {
-                    "class": "input-group-addon",
-                    "innerHTML": this.rightAddonCaption
-                });
-                dojoConstruct.place(this._rightAddonSpan, this.inputNodes, "last");
-            }
-
-            if (this._contextObj !== null) {
+            
+            if (this._isVisible()) {
                 dojoStyle.set(this.domNode, "display", "block");
 
                 var colorValue = this._contextObj.get(this.fieldAttribute);
 
                 this.inputNode.value = colorValue;
+
+                this.inputNode.disabled = this.readOnly;
+
+                // Show label
+                if (this.showLabel) {
+                    dojoConstruct.destroy(this._labelNode);
+                    this._labelNode = dojoConstruct.create("label", {
+                        "class": "control-label",
+                        "innerHTML": this.labelCaption
+                    });
+                    dojoConstruct.place(this._labelNode, this.formGroupNode, "first");
+                }
+
+                // Show left add-on
+                if (this.showLeftAddon) {
+                    dojoConstruct.destroy(this._leftAddonSpan);
+                    this._leftAddonSpan = dojoConstruct.create("span", {
+                        "class": "input-group-addon",
+                        "innerHTML": this.leftAddonCaption
+                    });
+                    dojoConstruct.place(this._leftAddonSpan, this.inputNodes, "first");
+                }
+
+                // Show right add-on
+                if (this.showRightAddon) {
+                    dojoConstruct.destroy(this._rightAddonSpan);
+                    this._rightAddonSpan = dojoConstruct.create("span", {
+                        "class": "input-group-addon",
+                        "innerHTML": this.rightAddonCaption
+                    });
+                    dojoConstruct.place(this._rightAddonSpan, this.inputNodes, "last");
+                }
             } else {
                 dojoStyle.set(this.domNode, "display", "none");
             }
@@ -264,7 +266,7 @@ define([
             // Call "on change" microflow
             this._callMicroflow(this.onEnter);
         },
-        
+
         // FieldEvent: onLeave
         _onLeave: function () {
             logger.debug(this.id + "._onLeave");
@@ -294,6 +296,10 @@ define([
                 }, this);
             }
         },
+        
+        _isVisible: function(){
+          return (this._contextObj !== null && this._contextObj.get(this.visibilityAttribute) !== false);  
+        },
 
         // Reset subscriptions.
         _resetSubscriptions: function () {
@@ -310,8 +316,8 @@ define([
                 this.mxform.unlisten(this._formValidateListener);
             }
 
-            // When a mendix object exists create subscribtions.
-            if (this._contextObj) {
+            // When a mendix object exists and is visible create subscribtions.
+            if (this._isVisible()) {
                 this._formValidateListener = this.mxform.listen("validate", dojoLang.hitch(this, function (callback, error) {
                     logger.debug(this.id + ".validate");
                     if (this._isValid()) {

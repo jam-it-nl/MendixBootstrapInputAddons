@@ -25,6 +25,16 @@
                 <attributeType name="Long" />
             </attributeTypes>
         </property>
+        
+        <property key="visibilityAttribute" required="false" type="attribute">
+            <caption>Visible</caption>
+            <category>Appearance</category>
+            <description>Make field conditionally visible based on a boolean attribute</description>
+            <attributeTypes>
+                <attributeType name="Boolean" />
+            </attributeTypes>
+        </property>
+        
         <property key="isRequired" type="boolean" required="true" defaultValue="false">
             <caption>Required</caption>
             <category>Appearance</category>
