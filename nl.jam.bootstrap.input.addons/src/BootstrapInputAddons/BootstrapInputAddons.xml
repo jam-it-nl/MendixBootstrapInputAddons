@@ -31,7 +31,7 @@
             <category>Behaviour</category>
             <description>Amount of decimals</description>
         </property>
-        <property key="groupDigits" type="boolean" defaultValue="true">
+        <property key="groupDigits" type="boolean" defaultValue="false">
             <caption>Group digits</caption>
             <category>Behaviour</category>
             <description>Displays a numeric value with group digits</description>
