@@ -206,6 +206,15 @@ define([
         },
 
         _setReadOnlyValue: function (value) {
+            
+            if (this.showLeftAddon){
+                value = this.leftAddonCaption + " " + value;
+            }
+            
+            if (this.showRightAddon){
+                value = value + " " + this.rightAddonCaption;
+            }
+            
             if (this.showLabel) {
                 var readOnlyField = dojoConstruct.create("p", {
                     "class": "form-control-static",
