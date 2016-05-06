@@ -25,7 +25,18 @@
                 <attributeType name="Long" />
             </attributeTypes>
         </property>
-        
+
+        <property key="decimalPrecision" type="integer" defaultValue="0">
+            <caption>Decimal precision</caption>
+            <category>Behaviour</category>
+            <description>Amount of decimals</description>
+        </property>
+        <property key="groupDigits" type="boolean" defaultValue="true">
+            <caption>Group digits</caption>
+            <category>Behaviour</category>
+            <description>Displays a numeric value with group digits</description>
+        </property>
+
         <property key="visibilityAttribute" required="false" type="attribute">
             <caption>Visible</caption>
             <category>Appearance</category>
@@ -34,16 +45,16 @@
                 <attributeType name="Boolean" />
             </attributeTypes>
         </property>
-        
+
         <property key="editable" type="enumeration" defaultValue="default">
-          <caption>Editable</caption>
-          <category>Appearance</category>
-          <description/>
-          <enumerationValues>
-            <enumerationValue key="default">Default</enumerationValue>
-            <enumerationValue key="never">Never</enumerationValue>
-            <enumerationValue key="conditionally">Conditionally</enumerationValue>
-          </enumerationValues>
+            <caption>Editable</caption>
+            <category>Appearance</category>
+            <description/>
+            <enumerationValues>
+                <enumerationValue key="default">Default</enumerationValue>
+                <enumerationValue key="never">Never</enumerationValue>
+                <enumerationValue key="conditionally">Conditionally</enumerationValue>
+            </enumerationValues>
         </property>
         <property key="editableAttribute" required="false" type="attribute">
             <caption>Editable condition</caption>
@@ -53,7 +64,7 @@
                 <attributeType name="Boolean" />
             </attributeTypes>
         </property>
-        
+
         <property key="isRequired" type="boolean" required="true" defaultValue="false">
             <caption>Required</caption>
             <category>Appearance</category>
@@ -94,26 +105,26 @@
             <category>Appearance</category>
             <description/>
         </property>
-        
+
         <property key="onChange" type="microflow" required="false" defaultValue="">
             <caption>On Change</caption>
-            <category>Behavior</category>
+            <category>Behaviour</category>
             <description/>
             <returnType type="Void" />
         </property>
         <property key="onEnter" type="microflow" required="false" defaultValue="">
             <caption>On Enter</caption>
-            <category>Behavior</category>
+            <category>Behaviour</category>
             <description/>
             <returnType type="Void" />
         </property>
         <property key="onLeave" type="microflow" required="false" defaultValue="">
             <caption>On Leave</caption>
-            <category>Behavior</category>
+            <category>Behaviour</category>
             <description/>
             <returnType type="Void" />
         </property>
-        
+
     </properties>
 </widget>
 

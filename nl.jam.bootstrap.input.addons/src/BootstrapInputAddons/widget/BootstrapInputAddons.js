@@ -20,6 +20,7 @@ define([
     "mxui/widget/_WidgetBase",
     "dijit/_TemplatedMixin",
 
+    "dojo/_base/kernel",
     "dojo/dom-class",
     "dojo/dom-style",
     "dojo/dom-construct",
@@ -29,7 +30,7 @@ define([
     "dojo/_base/event",
 
     "dojo/text!BootstrapInputAddons/widget/template/BootstrapInputAddons.html"
-], function (declare, _WidgetBase, _TemplatedMixin, dojoClass, dojoStyle, dojoConstruct, dojoArray, dojoLang, dojoHtml, dojoEvent, widgetTemplate) {
+], function (declare, _WidgetBase, _TemplatedMixin, dojo, dojoClass, dojoStyle, dojoConstruct, dojoArray, dojoLang, dojoHtml, dojoEvent, widgetTemplate) {
     "use strict";
 
     // Declare widget's prototype.
@@ -43,6 +44,8 @@ define([
         formGroupNode: null,
 
         // Parameters configured in the Modeler.
+        decimalPrecision: "",
+        groupDigits: "",
         visibilityAttribute: "",
         editable: "",
         editableAttribute: "",
@@ -152,8 +155,8 @@ define([
 
             if (this._isVisible()) {
                 dojoStyle.set(this.domNode, "display", "block");
-                
-                var value = this._contextObj.get(this.fieldAttribute);            
+
+                var value = this._getValueFromContextObject(this.fieldAttribute);
                 this.inputNode.value = value;
 
                 this._addLabel();
@@ -170,6 +173,21 @@ define([
 
             // Important to clear all validations!
             this._clearValidations();
+        },
+
+        _getValueFromContextObject: function (attribute) {
+            if (this._contextObj.isNumeric(attribute) || this._contextObj.isCurrency(attribute) || this._contextObj.getAttributeType(attribute) === "AutoNumber") {
+                var numberOptions = {};
+                numberOptions.places = this.decimalPrecision;
+                if (this.groupDigits) {
+                    numberOptions.locale = dojo.locale;
+                    numberOptions.groups = true;
+                }
+
+                return mx.parser.formatValue(this._contextObj.get(attribute), this._contextObj.getAttributeType(attribute), numberOptions);
+            }
+
+            return mx.parser.formatAttribute(this._contextObj, attribute);
         },
 
         _addLabel: function () {
@@ -206,15 +224,15 @@ define([
         },
 
         _setReadOnlyValue: function (value) {
-            
-            if (this.showLeftAddon){
+
+            if (this.showLeftAddon) {
                 value = this.leftAddonCaption + " " + value;
             }
-            
-            if (this.showRightAddon){
+
+            if (this.showRightAddon) {
                 value = value + " " + this.rightAddonCaption;
             }
-            
+
             if (this.showLabel) {
                 var readOnlyField = dojoConstruct.create("p", {
                     "class": "form-control-static",
