@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<widget id="BootstrapInputAddons.widget.BootstrapInputAddons" needsEntityContext="true" xmlns="http://www.mendix.com/widget/1.0/">
+    <name>BootstrapInputAddons</name>
+    <description>This widget gives the possibility to use bootstrap input add-ons on normal fields.</description>
+
+    <icon />
+
+    <properties>
+        <property key="fieldAttribute" type="attribute">
+            <caption>Attribute (path)</caption>
+            <category>Appearance</category>
+            <description/>
+            <attributeTypes>
+                <attributeType name="String" />
+                <attributeType name="AutoNumber" />
+                <attributeType name="Binary" />
+                <attributeType name="Boolean" />
+                <attributeType name="Currency" />
+                <attributeType name="DateTime" />
+                <attributeType name="Decimal" />
+                <attributeType name="Enum" />
+                <attributeType name="Float" />
+                <attributeType name="HashString" />
+                <attributeType name="Integer" />
+                <attributeType name="Long" />
+            </attributeTypes>
+        </property>
+        
+        <property key="placeholderText" type="string" required="false" defaultValue="">
+            <caption>Placeholder text</caption>
+            <category>Appearance</category>
+            <description/>
+        </property>
+
+        <property key="decimalPrecision" type="integer" defaultValue="0">
+            <caption>Decimal precision</caption>
+            <category>Behaviour</category>
+            <description>Amount of decimals</description>
+        </property>
+        <property key="groupDigits" type="boolean" defaultValue="false">
+            <caption>Group digits</caption>
+            <category>Behaviour</category>
+            <description>Displays a numeric value with group digits</description>
+        </property>
+
+        <property key="visibilityAttribute" required="false" type="attribute">
+            <caption>Visible</caption>
+            <category>Appearance</category>
+            <description>Make field conditionally visible based on a boolean attribute</description>
+            <attributeTypes>
+                <attributeType name="Boolean" />
+            </attributeTypes>
+        </property>
+
+        <property key="editable" type="enumeration" defaultValue="default">
+            <caption>Editable</caption>
+            <category>Appearance</category>
+            <description/>
+            <enumerationValues>
+                <enumerationValue key="default">Default</enumerationValue>
+                <enumerationValue key="never">Never</enumerationValue>
+                <enumerationValue key="conditionally">Conditionally</enumerationValue>
+            </enumerationValues>
+        </property>
+        <property key="editableAttribute" required="false" type="attribute">
+            <caption>Editable condition</caption>
+            <category>Appearance</category>
+            <description>Make field editable when condition equals true</description>
+            <attributeTypes>
+                <attributeType name="Boolean" />
+            </attributeTypes>
+        </property>
+
+        <property key="isRequired" type="boolean" required="true" defaultValue="false">
+            <caption>Required</caption>
+            <category>Appearance</category>
+            <description/>
+        </property>
+        <property key="requiredMessage" type="string" required="false" defaultValue="">
+            <caption>Required message</caption>
+            <category>Appearance</category>
+            <description/>
+        </property>
+        <property key="useRegExValidation" type="boolean" required="true" defaultValue="false">
+            <caption>Use reg ex validation</caption>
+            <category>Appearance</category>
+            <description/>
+        </property>
+        <property key="regEx" type="string" required="false" defaultValue="">
+            <caption>Regular expression</caption>
+            <category>Appearance</category>
+            <description/>
+        </property>
+        <property key="regExMessage" type="string" required="false" defaultValue="">
+            <caption>Reg ex message</caption>
+            <category>Appearance</category>
+            <description/>
+        </property>
+        
+        
+        <property key="showLabel" type="boolean" required="true" defaultValue="false">
+            <caption>Show label</caption>
+            <category>Appearance</category>
+            <description/>
+        </property>
+        <property key="labelCaption" type="string" required="false" defaultValue="">
+            <caption>Label caption</caption>
+            <category>Appearance</category>
+            <description/>
+        </property>
+        <property key="showLeftAddon" type="boolean" required="true" defaultValue="false">
+            <caption>Show left add-on</caption>
+            <category>Appearance</category>
+            <description/>
+        </property>
+        <property key="leftAddonCaption" type="string" required="false" defaultValue="">
+            <caption>Left add-on caption</caption>
+            <category>Appearance</category>
+            <description/>
+        </property>
+        <property key="showRightAddon" type="boolean" required="true" defaultValue="false">
+            <caption>Show right add-on</caption>
+            <category>Appearance</category>
+            <description/>
+        </property>
+        <property key="rightAddonCaption" type="string" required="false" defaultValue="">
+            <caption>Right add-on caption</caption>
+            <category>Appearance</category>
+            <description/>
+        </property>
+
+        <property key="onChange" type="microflow" required="false" defaultValue="">
+            <caption>On Change</caption>
+            <category>Behaviour</category>
+            <description/>
+            <returnType type="Void" />
+        </property>
+        <property key="onEnter" type="microflow" required="false" defaultValue="">
+            <caption>On Enter</caption>
+            <category>Behaviour</category>
+            <description/>
+            <returnType type="Void" />
+        </property>
+        <property key="onLeave" type="microflow" required="false" defaultValue="">
+            <caption>On Leave</caption>
+            <category>Behaviour</category>
+            <description/>
+            <returnType type="Void" />
+        </property>
+
+    </properties>
+</widget>
+
