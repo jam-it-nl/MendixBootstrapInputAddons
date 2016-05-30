@@ -17,7 +17,7 @@
 
 define([
     "dojo/_base/declare",
-    "mendix/validator",
+    // "mendix/validator",
     "mxui/widget/_WidgetBase",
     "dijit/_TemplatedMixin",
 
@@ -32,7 +32,7 @@ define([
     "dojo/_base/event",
 
     "dojo/text!BootstrapInputAddons/widget/template/BootstrapInputAddons.html"
-], function (declare, validator, _WidgetBase, _TemplatedMixin, dojo, dojoClass, dojoStyle, dojoConstruct, dojoAttr, dojoArray, dojoLang, dojoHtml, dojoEvent, widgetTemplate) {
+], function (declare, /*validator,*/ _WidgetBase, _TemplatedMixin, dojo, dojoClass, dojoStyle, dojoConstruct, dojoAttr, dojoArray, dojoLang, dojoHtml, dojoEvent, widgetTemplate) {
     "use strict";
 
     // Declare widget's prototype.
@@ -336,7 +336,7 @@ define([
                 }
 
                 // Validate for valid numbers
-                var isValidNumber = true;
+                /*var isValidNumber = true;
                 try {
                     if (this._contextObj.isNumeric(this.fieldAttribute)) {
                         var unformattedValue = this._getUnformattedValue(this.fieldAttribute, this.inputNode.value);
@@ -353,11 +353,10 @@ define([
 
                     this._validationMessage = "Ongeldig nummer";
                     return false;
-                }
+                }*/
 
             }
 
-            logger.debug(this.id + "true");
             return true;
         },
 
