@@ -41,11 +41,14 @@ define([
         templateString: widgetTemplate,
 
         // DOM elements
+        inputDiv: null,
         inputNodes: null,
         inputNode: null,
         formGroupNode: null,
 
         // Parameters configured in the Modeler.
+        formOrientation: "",
+        labelWidth: 0,
         placeholderText: "",
         decimalPrecision: "",
         groupDigits: "",
@@ -170,6 +173,8 @@ define([
                 this._addLeftAddon();
                 this._addRightAddon();
 
+                dojoClass.add(this.inputDiv, this._getInputDivClass());
+
                 if (!this._isEmptyString(this.placeholderText)) {
                     dojoAttr.set(this.inputNode, "placeholder", this.placeholderText);
                 }
@@ -214,11 +219,29 @@ define([
             if (this.showLabel) {
                 dojoConstruct.destroy(this._labelNode);
                 this._labelNode = dojoConstruct.create("label", {
-                    "class": "control-label",
+                    "class": this._getLabelClass(),
                     "innerHTML": this.labelCaption
                 });
                 dojoConstruct.place(this._labelNode, this.formGroupNode, "first");
             }
+        },
+
+        _getLabelClass: function () {
+            var styleClass = "control-label";
+
+            if (this.formOrientation == "horizontal") {
+                styleClass += " col-sm-" + this.labelWidth;
+            }
+
+            return styleClass;
+        },
+
+        _getInputDivClass: function () {
+            if (this.formOrientation == "horizontal") {
+                return "col-sm-" + (12 - this.labelWidth);
+            }
+
+            return "";
         },
 
         _addLeftAddon: function () {
@@ -290,7 +313,7 @@ define([
             logger.debug(this.id + "._clearValidations");
             dojoConstruct.destroy(this._alertDiv);
             this._alertDiv = null;
-            dojoClass.remove(this.formGroupNode, "has-error");
+            dojoClass.remove(this.inputDiv, "has-error");
         },
 
         // Show an error message.
@@ -304,8 +327,8 @@ define([
                 "class": "alert alert-danger",
                 "innerHTML": message
             });
-            dojoConstruct.place(this._alertDiv, this.formGroupNode, "last");
-            dojoClass.add(this.formGroupNode, "has-error");
+            dojoConstruct.place(this._alertDiv, this.inputDiv, "last");
+            dojoClass.add(this.inputDiv, "has-error");
         },
 
         // Check if validates
