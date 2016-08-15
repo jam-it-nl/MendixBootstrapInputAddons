@@ -347,11 +347,13 @@ define([
         _isValid: function () {
             logger.debug(this.id + "._isValid " + this.fieldAttribute);
 
+            
             if (this._isEditable() && this.inputNode) {
+                var value = this.inputNode.value;
 
                 // Check for required
                 if (this.isRequired) {
-                    if (this._isEmptyString(this.inputNode.value)) {
+                    if (this._isEmptyString(value)) {
                         logger.debug(this.id + "._isValid required false");
 
                         this._validationMessage = this.requiredMessage;
@@ -360,9 +362,9 @@ define([
                 }
 
                 // Check for RegEx
-                if (this.useRegExValidation && !this._isEmptyString(this.inputNode.value)) {
+                if (this.useRegExValidation && !this._isEmptyString(value)) {
                     var regExp = new RegExp(this.regEx);
-                    if (!regExp.test(this.inputNode.value)) {
+                    if (!regExp.test(value)) {
                         logger.debug(this.id + "._isValid regex false");
 
                         this._validationMessage = this.regExMessage;
@@ -374,7 +376,7 @@ define([
                 /*var isValidNumber = true;
                 try {
                     if (this._contextObj.isNumeric(this.fieldAttribute)) {
-                        var unformattedValue = this._getUnformattedValue(this.fieldAttribute, this.inputNode.value);
+                        var unformattedValue = this._getUnformattedValue(this.fieldAttribute, value);
                         if (!(validator.validate(unformattedValue, this._contextObj.getAttributeType(this.fieldAttribute)) === validator.validation.OK)) {
                             isValidNumber = false;
                         }
@@ -418,10 +420,10 @@ define([
 
                 // Call "on change" microflow
                 this._callMicroflow(this.onChange);
-            }
-
-            if (!isValid){
-                this._addValidation(this._validationMessage);
+            }else {
+                if (!isValid){
+                    this._addValidation(this._validationMessage);
+                }
             }
 
         },
@@ -453,9 +455,12 @@ define([
                     store: {
                         caller: this.mxform
                     },
-                    callback: function (obj) {
-                        // Is called wgen all is ok
-                    },
+                    callback: dojoLang.hitch(this, function (obj) {
+                        // Is called wHen all is ok
+                        if (!this._isValid()){
+                            this._addValidation(this._validationMessage);
+                        }
+                    }),
                     error: dojoLang.hitch(this, function (error) {
                         logger.error(this.id + ": An error occurred while executing microflow: " + error.description);
                     })
