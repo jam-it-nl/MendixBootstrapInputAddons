@@ -71,6 +71,7 @@ define([
         fieldAttribute: "",
 
         onChange: "",
+        onChangeAbortOnValidationErrors: "",
         onEnter: "",
         onLeave: "",
 
@@ -187,8 +188,14 @@ define([
                 dojoStyle.set(this.domNode, "display", "none");
             }
 
-            // Important to clear all validations!
+            // Clear old validations
+            var oldValidationShown = this._isValidationShown();
             this._clearValidations();
+
+            // Show validation messages if the widget was already on the page            
+            if (oldValidationShown && !this._isValid()){
+                this._addValidation(this._validationMessage);
+            }
         },
 
         _getValueFromContextObject: function (attribute) {
@@ -308,6 +315,11 @@ define([
             }
         },
 
+        _isValidationShown: function () {
+            logger.debug(this.id + "._isValidationShown");
+            return (this._alertDiv != null);            
+        },
+
         // Clear validations.
         _clearValidations: function () {
             logger.debug(this.id + "._clearValidations");
@@ -396,16 +408,22 @@ define([
         // FieldEvent: onChange
         _onChange: function () {
             logger.debug(this.id + "._onChange");
-            // Check for required
-            if (this._isValid()) {
+
+            // Check validations
+            var isValid = this._isValid();
+
+            if (this.onChangeAbortOnValidationErrors == "no" || isValid){
                 // Set attribute value
                 this._setValueInContextObject(this.fieldAttribute, this.inputNode.value);
 
                 // Call "on change" microflow
                 this._callMicroflow(this.onChange);
-            } else {
+            }
+
+            if (!isValid){
                 this._addValidation(this._validationMessage);
             }
+
         },
 
         // FieldEvent: onEnter

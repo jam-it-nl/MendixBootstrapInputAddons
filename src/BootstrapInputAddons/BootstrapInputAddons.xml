@@ -139,6 +139,15 @@
             <description/>
             <returnType type="Void"/>
         </property>
+        <property defaultValue="yes" key="onChangeAbortOnValidationErrors" type="enumeration">
+            <caption>Abort on validation errors (onChange)</caption>
+            <category>Behaviour</category>
+            <description/>
+            <enumerationValues>
+                <enumerationValue key="yes">Yes</enumerationValue>
+                <enumerationValue key="no">No</enumerationValue>
+            </enumerationValues>
+        </property>
         <property defaultValue="" key="onEnter" required="false" type="microflow">
             <caption>On Enter</caption>
             <category>Behaviour</category>
