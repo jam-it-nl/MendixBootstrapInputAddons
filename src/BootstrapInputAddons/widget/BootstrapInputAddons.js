@@ -167,7 +167,7 @@ define([
             if (this._isVisible()) {
                 dojoStyle.set(this.domNode, "display", "block");
 
-                var value = this._getValueFromContextObject(this.fieldAttribute);
+                var value = this._getFormattedValueFromContextObject(this.fieldAttribute);
                 this.inputNode.value = value;
 
                 this._addLabel();
@@ -198,7 +198,7 @@ define([
             }
         },
 
-        _getValueFromContextObject: function (attribute) {
+        _getFormattedValueFromContextObject: function (attribute) {
             if (this._contextObj.isNumeric(attribute) || this._contextObj.isCurrency(attribute) || this._contextObj.getAttributeType(attribute) === "AutoNumber") {
                 var numberOptions = {};
                 numberOptions.places = this.decimalPrecision;
@@ -373,7 +373,18 @@ define([
                 }
 
                 // Validate for valid numbers
-                /*var isValidNumber = true;
+                if (this._contextObj.isNumeric(this.fieldAttribute)) {
+                    var unformattedValue = this._getUnformattedValue(this.fieldAttribute, value);
+                    if (unformattedValue == null) {
+                        this._validationMessage = "Ongeldig nummer";
+                        return false;
+                    }
+                }
+
+
+                /*
+                // Should be done like this, but there is a bug in Mendix preventing the use of validator
+                var isValidNumber = true;
                 try {
                     if (this._contextObj.isNumeric(this.fieldAttribute)) {
                         var unformattedValue = this._getUnformattedValue(this.fieldAttribute, value);

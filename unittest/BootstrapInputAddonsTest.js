@@ -5,6 +5,58 @@ define(["doh/runner", "BootstrapInputAddons/widget/BootstrapInputAddons"], funct
         console.log("Log statement to easily find the file for debugging");
         doh.assertTrue(true);
       },
+
+      function testFormatingValue(){
+        var contextObjectValue = "";
+
+        mx.parser.formatValue = function(unformattedValue){
+            if (unformattedValue === "1000.12"){
+                return "1.000,12";
+            }
+            return null;    
+        };
+        mx.parser.parseValue = function(formattedValue){
+            if (formattedValue === "1.000,12"){
+                return "1000.12";
+            } 
+            return null;     
+        };
+
+        var bootstrapInputAddons = new BootstrapInputAddons();
+        bootstrapInputAddons.isRequired = false;
+        bootstrapInputAddons.editable = "default";
+        bootstrapInputAddons.readOnly = false;
+        bootstrapInputAddons._contextObj = {};
+        bootstrapInputAddons._contextObj.getAttributeType = function(){
+            return "Decimal";
+        };
+        bootstrapInputAddons._contextObj.isNumeric = function(){
+            return true;
+        };
+        bootstrapInputAddons._contextObj.get = function(){
+            return contextObjectValue;
+        };
+        bootstrapInputAddons._contextObj.set = function(attribute, unformattedValue){
+            contextObjectValue = unformattedValue;
+        };
+        
+        bootstrapInputAddons._setValueInContextObject("attribute", "1.000,12");
+        doh.assertEqual("1000.12", contextObjectValue);
+
+        var formattedValue = bootstrapInputAddons._getFormattedValueFromContextObject("attribute");
+        doh.assertEqual("1.000,12", formattedValue);
+
+        bootstrapInputAddons.inputNode.value = "1.000,12";
+        bootstrapInputAddons._onChange();
+        doh.assertEqual("1000.12", contextObjectValue);
+
+        // Unvalid input
+        bootstrapInputAddons.inputNode.value = "1000,12.34";
+        bootstrapInputAddons._onChange();
+        doh.assertEqual("1000.12", contextObjectValue);
+        doh.assertTrue(bootstrapInputAddons._isValidationShown());
+      },
+
       function testIsValidRequiredEmpty(){
         var bootstrapInputAddons = new BootstrapInputAddons();
         bootstrapInputAddons.isRequired = true;
