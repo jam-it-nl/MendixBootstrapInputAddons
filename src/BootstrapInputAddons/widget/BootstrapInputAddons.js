@@ -28,7 +28,7 @@ define([
     "dojo/dom-attr",
     "dojo/_base/array",
     "dojo/_base/lang",
-    "dojo/html",
+    "dojo/html", 
     "dojo/_base/event",
 
     "dojo/text!BootstrapInputAddons/widget/template/BootstrapInputAddons.html"
@@ -227,10 +227,23 @@ define([
                 dojoConstruct.destroy(this._labelNode);
                 this._labelNode = dojoConstruct.create("label", {
                     "class": this._getLabelClass(),
-                    "innerHTML": this.labelCaption
+                    "innerHTML": this._getLabelCaption()
                 });
                 dojoConstruct.place(this._labelNode, this.formGroupNode, "first");
             }
+        },
+
+        _getLabelCaption: function () {
+
+            var replaceFunction = dojoLang.hitch(this, function(replaceString, firstMatch, secondMatch) {
+                var attributeValue = this._contextObj.get(secondMatch);
+                return replaceString.replace(firstMatch, attributeValue);
+            });
+
+            var expression = /({(.+?)})/g;
+            var result = this.labelCaption.replace(expression, replaceFunction);
+
+            return result;
         },
 
         _getLabelClass: function () {

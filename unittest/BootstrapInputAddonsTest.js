@@ -80,6 +80,22 @@ define(["doh/runner", "BootstrapInputAddons/widget/BootstrapInputAddons"], funct
         doh.assertEqual("control-label col-sm-3", labelClass);
       },
 
+      function testGetLabelCaption(){
+        var bootstrapInputAddons = new BootstrapInputAddons();
+        bootstrapInputAddons.labelCaption = "Label";
+        var labelCaption = bootstrapInputAddons._getLabelCaption();
+        doh.assertEqual("Label", labelCaption);
+
+        var bootstrapInputAddons = new BootstrapInputAddons();
+        bootstrapInputAddons._contextObj = {};
+        bootstrapInputAddons._contextObj.get = function(name){
+            return name;
+        };
+        bootstrapInputAddons.labelCaption = "Label for {name} with {another} match and then the {last} match by {name}";;
+        var labelCaption = bootstrapInputAddons._getLabelCaption();
+        doh.assertEqual("Label for name with another match and then the last match by name", labelCaption);
+      },
+
       function testGetInputDivClass(){
         var bootstrapInputAddons = new BootstrapInputAddons();
         var labelClass = bootstrapInputAddons._getInputDivClass();
