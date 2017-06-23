@@ -70,6 +70,15 @@
                 <enumerationValue key="conditionally">Conditionally</enumerationValue>
             </enumerationValues>
         </property>
+        <property defaultValue="textLabel" key="readOnlyMode" type="enumeration">
+            <caption>Read-only mode</caption>
+            <category>Appearance</category>
+            <description/>
+            <enumerationValues>
+                <enumerationValue key="textLabel">Text</enumerationValue>
+                <enumerationValue key="textControl">Control</enumerationValue>
+            </enumerationValues>
+        </property>
         <property key="editableAttribute" required="false" type="attribute">
             <caption>Editable condition</caption>
             <category>Appearance</category>

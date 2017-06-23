@@ -54,6 +54,7 @@ define([
         groupDigits: "",
         visibilityAttribute: "",
         editable: "",
+        readOnlyMode: "",
         editableAttribute: "",
         showLabel: "",
         labelCaption: "",
@@ -176,11 +177,15 @@ define([
 
                 dojoClass.add(this.inputDiv, this._getInputDivClass());
 
+                if (!this._isEditable() && this.readOnlyMode == "textControl") {
+                    dojoAttr.set(this.inputNode, "disabled", "disabled");
+                }
+
                 if (!this._isEmptyString(this.placeholderText)) {
                     dojoAttr.set(this.inputNode, "placeholder", this.placeholderText);
                 }
 
-                if (!this._isEditable()) {
+                if (!this._isEditable() && this.readOnlyMode == "textLabel") {
                     this._setReadOnlyValue(value);
                 }
 
@@ -265,7 +270,7 @@ define([
         },
 
         _addLeftAddon: function () {
-            if (this.showLeftAddon && this._isEditable()) {
+            if (this.showLeftAddon && (this._isEditable() || (!this._isEditable() && this.readOnlyMode == "textControl"))) {
                 dojoConstruct.destroy(this._leftAddonSpan);
                 this._leftAddonSpan = dojoConstruct.create("span", {
                     "class": "input-group-addon",
@@ -278,7 +283,7 @@ define([
         },
 
         _addRightAddon: function () {
-            if (this.showRightAddon && this._isEditable()) {
+            if (this.showRightAddon && (this._isEditable() || (!this._isEditable() && this.readOnlyMode == "textControl"))) {
                 dojoConstruct.destroy(this._rightAddonSpan);
                 this._rightAddonSpan = dojoConstruct.create("span", {
                     "class": "input-group-addon",
