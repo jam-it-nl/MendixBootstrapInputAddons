@@ -8,9 +8,10 @@ To use the widget, place it in a Entity context (like a dataview) and configure 
 
 ## Features
 * Add text before, after, or on both sides of any text-based input
-* (Optional) show the label of an input field
-* (Optional) set field as required
+* Optional show the label of an input field
+* Optional set field as required
 * Format numbers with configurable groups and digits
+* Optional show negative numbers as positive
 * onChange, onEnter and onLeave events
 * Visibility and editable parameter
 * Use of variables in the label (syntax: {attributeName})
