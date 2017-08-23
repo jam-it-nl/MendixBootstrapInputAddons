@@ -213,7 +213,14 @@ define([
                     numberOptions.groups = true;
                 }
 
-                return mx.parser.formatValue(this._contextObj.get(attribute), this._contextObj.getAttributeType(attribute), numberOptions);
+                var value = this._contextObj.get(attribute);
+                if (this.showNegativeAsPositive){
+                    if (value < 0){
+                        value = -1 * value;
+                    }
+                }
+
+                return mx.parser.formatValue(value, this._contextObj.getAttributeType(attribute), numberOptions);
             }
 
             return mx.parser.formatAttribute(this._contextObj, attribute);

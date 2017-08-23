@@ -11,7 +11,7 @@ To use the widget, place it in a Entity context (like a dataview) and configure 
 * Optional show the label of an input field
 * Optional set field as required
 * Format numbers with configurable groups and digits
-* Optional show negative numbers as positive
+* Optional show negative numbers as positive and with a different label
 * onChange, onEnter and onLeave events
 * Visibility and editable parameter
 * Use of variables in the label (syntax: {attributeName})
