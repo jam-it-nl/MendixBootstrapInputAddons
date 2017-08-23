@@ -57,6 +57,11 @@
             <category>Behaviour</category>
             <description>Displays a numeric negative value as a positive value</description>
         </property>
+        <property defaultValue="" key="negativeLabelCaption" required="false" type="string">
+            <caption>Label caption for negative number</caption>
+            <category>Behaviour</category>
+            <description>Label caption for a negative number that is shown as positive</description>
+        </property>
         <property key="visibilityAttribute" required="false" type="attribute">
             <caption>Visible</caption>
             <category>Appearance</category>

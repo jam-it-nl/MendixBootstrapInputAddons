@@ -59,6 +59,7 @@ define([
         editableAttribute: "",
         showLabel: "",
         labelCaption: "",
+        negativeLabelCaption: "",
         showLeftAddon: "",
         leftAddonCaption: "",
         showRightAddon: "",
@@ -254,7 +255,13 @@ define([
             });
 
             var expression = /({(.+?)})/g;
-            var result = this.labelCaption.replace(expression, replaceFunction);
+
+            var label = this.labelCaption;
+            if (this.showNegativeAsPositive){
+                label = this.negativeLabelCaption;
+            }
+
+            var result = label.replace(expression, replaceFunction);
 
             return result;
         },
