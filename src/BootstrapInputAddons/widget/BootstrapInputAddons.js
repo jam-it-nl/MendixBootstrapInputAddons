@@ -52,6 +52,7 @@ define([
         placeholderText: "",
         decimalPrecision: "",
         groupDigits: "",
+        showNegativeAsPositive: "",
         visibilityAttribute: "",
         editable: "",
         readOnlyMode: "",

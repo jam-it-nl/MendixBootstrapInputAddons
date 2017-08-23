@@ -52,6 +52,11 @@
             <category>Behaviour</category>
             <description>Displays a numeric value with group digits</description>
         </property>
+        <property defaultValue="false" key="showNegativeAsPositive" type="boolean">
+            <caption>Show numbers negative as positive</caption>
+            <category>Behaviour</category>
+            <description>Displays a numeric negative value as a positive value</description>
+        </property>
         <property key="visibilityAttribute" required="false" type="attribute">
             <caption>Visible</caption>
             <category>Appearance</category>
