@@ -1,0 +1,10 @@
+{
+  "generator-mendix": {
+    "promptValues": {
+      "copyright": "JAM-IT B.V.",
+      "license": "Apache 2",
+      "author": "Martijn Raats",
+      "boilerplate": "appstore"
+    }
+  }
+}

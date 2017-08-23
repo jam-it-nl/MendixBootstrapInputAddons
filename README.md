@@ -23,7 +23,7 @@ For any request or bug please create an issue at [GitHub](https://github.com/JAM
 
 # Build project
 * npm install
-* grunt watch
+* gulp
 
 # Run unittest
 Start webserver (in project root)
