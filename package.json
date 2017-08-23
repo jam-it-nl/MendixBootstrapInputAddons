@@ -5,8 +5,7 @@
   "license": "Apache 2",
   "author": "Martijn Raats",
   "private": true,
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "grunt": "0.4.5",
     "grunt-contrib-clean": "^0.6.0",
