@@ -258,7 +258,10 @@ define([
 
             var label = this.labelCaption;
             if (this.showNegativeAsPositive){
-                label = this.negativeLabelCaption;
+                var value = this._contextObj.get(this.fieldAttribute);
+                if (value < 0) {
+                    label = this.negativeLabelCaption;
+                }
             }
 
             var result = label.replace(expression, replaceFunction);
