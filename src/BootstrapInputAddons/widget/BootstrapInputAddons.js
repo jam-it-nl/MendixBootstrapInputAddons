@@ -330,6 +330,7 @@ define([
                 var button = dojoConstruct.create("button", {
                     "class": "btn btn-secondary",
                     "type": "button",
+                    "style": "padding-top: 7px; padding-bottom: 7px;",
                     "innerHTML": this.rightAddonButtonCaption
                 });
 
