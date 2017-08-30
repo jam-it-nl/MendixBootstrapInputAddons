@@ -152,6 +152,16 @@
             <category>Appearance</category>
             <description/>
         </property>
+        <property defaultValue="false" key="showRightButtonAddon" required="true" type="boolean">
+            <caption>Show right button add-on</caption>
+            <category>Appearance</category>
+            <description/>
+        </property>
+        <property defaultValue="" key="rightAddonButtonCaption" required="false" type="string">
+            <caption>Right add-on button caption</caption>
+            <category>Appearance</category>
+            <description/>
+        </property>
         <property defaultValue="" key="onChange" required="false" type="microflow">
             <caption>On Change</caption>
             <category>Behaviour</category>
@@ -175,6 +185,12 @@
         </property>
         <property defaultValue="" key="onLeave" required="false" type="microflow">
             <caption>On Leave</caption>
+            <category>Behaviour</category>
+            <description/>
+            <returnType type="Void"/>
+        </property>
+        <property defaultValue="" key="onClick" required="false" type="microflow">
+            <caption>On Click (of the button)</caption>
             <category>Behaviour</category>
             <description/>
             <returnType type="Void"/>

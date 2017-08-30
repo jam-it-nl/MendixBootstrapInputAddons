@@ -8,6 +8,7 @@ To use the widget, place it in a Entity context (like a dataview) and configure 
 
 ## Features
 * Add text before, after, or on both sides of any text-based input
+* Add button addons on the right of an input field
 * Optional show the label of an input field
 * Optional set field as required
 * Format numbers with configurable groups and digits

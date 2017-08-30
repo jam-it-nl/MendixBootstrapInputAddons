@@ -64,6 +64,8 @@ define([
         leftAddonCaption: "",
         showRightAddon: "",
         rightAddonCaption: "",
+        showRightButtonAddon: "",
+        rightAddonButtonCaption: "",
         isRequired: "",
         requiredMessage: "",
         useRegExValidation: "",
@@ -77,6 +79,7 @@ define([
         onChangeAbortOnValidationErrors: "",
         onEnter: "",
         onLeave: "",
+        onClick: "",
 
         // Internal variables. Non-primitives created in the prototype are shared between all widget instances.
         _formValidateListener: null,
@@ -85,6 +88,7 @@ define([
         _alertDiv: null,
         _leftAddonSpan: null,
         _rightAddonSpan: null,
+        _rightButtonAddonSpan: null,
         _labelNode: null,
         _validationMessage: null,
 
@@ -161,6 +165,7 @@ define([
             this.connect(this.inputNode, "blur", function (e) {
                 this._onLeave();
             });
+
         },
 
         // Rerender the interface.
@@ -176,6 +181,7 @@ define([
                 this._addLabel();
                 this._addLeftAddon();
                 this._addRightAddon();
+                this._addRightButtonAddon();
 
                 dojoClass.add(this.inputDiv, this._getInputDivClass());
 
@@ -310,6 +316,31 @@ define([
                 dojoConstruct.place(this._rightAddonSpan, this.inputNodes, "last");
 
                 dojoClass.add(this.inputNodes, "input-group");
+            }
+        },
+
+        _addRightButtonAddon: function () {
+            if (this.showRightButtonAddon && (this._isEditable() || (!this._isEditable() && this.readOnlyMode == "textControl"))) {
+                dojoConstruct.destroy(this._rightButtonAddonSpan);
+
+                this._rightButtonAddonSpan = dojoConstruct.create("span", {
+                    "class": "input-group-btn"
+                });
+
+                var button = dojoConstruct.create("button", {
+                    "class": "btn btn-secondary",
+                    "type": "button",
+                    "innerHTML": this.rightAddonButtonCaption
+                });
+
+                dojoConstruct.place(button, this._rightButtonAddonSpan, "last");
+                dojoConstruct.place(this._rightButtonAddonSpan, this.inputNodes, "last");
+
+                dojoClass.add(this.inputNodes, "input-group");
+
+                this.connect(button, "click", function (e) {
+                    this._onClick();
+                });
             }
         },
 
@@ -487,6 +518,12 @@ define([
             logger.debug(this.id + "._onLeave");
             // Call "on change" microflow
             this._callMicroflow(this.onLeave);
+        },
+
+        // FieldEvent: onLeave
+        _onClick: function () {
+            logger.debug(this.id + ".onClick");
+            this._callMicroflow(this.onClick);
         },
 
         // Call MicroFlow
