@@ -30,16 +30,16 @@ define([
     "dojo/_base/lang",
     "dojo/html", 
     "dojo/_base/event",
-
-    "dojo/text!BootstrapInputAddons/widget/template/BootstrapInputAddons.html"
-], function (declare, /*validator,*/ _WidgetBase, _TemplatedMixin, dojo, dojoClass, dojoStyle, dojoConstruct, dojoAttr, dojoArray, dojoLang, dojoHtml, dojoEvent, widgetTemplate) {
+    "dojo/text!BootstrapInputAddons/widget/template/BootstrapInputAddons.html",
+    "BootstrapInputAddons/lib/jquery-1.11.2"
+], function (declare, /*validator,*/ _WidgetBase, _TemplatedMixin, dojo, dojoClass, dojoStyle, dojoConstruct, dojoAttr, dojoArray, dojoLang, dojoHtml, dojoEvent, widgetTemplate, jQuery) {
     "use strict";
 
     // Declare widget's prototype.
     return declare("BootstrapInputAddons.widget.BootstrapInputAddons", [_WidgetBase, _TemplatedMixin], {
         // _TemplatedMixin will create our dom node using this HTML template.
         templateString: widgetTemplate,
-
+        jQuery: jQuery.noConflict(true),
         // DOM elements
         inputDiv: null,
         inputNodes: null,
@@ -58,6 +58,8 @@ define([
         readOnlyMode: "",
         editableAttribute: "",
         showLabel: "",
+		tooltipText: "",
+		tooltipPosition: "",
         labelCaption: "",
         negativeLabelCaption: "",
         showLeftAddon: "",
@@ -90,7 +92,9 @@ define([
         _rightAddonSpan: null,
         _rightButtonAddonSpan: null,
         _labelNode: null,
+        _toolTipNode: null,
         _validationMessage: null,
+        _tooltipSpace: 0,
 
         // dojo.declare.constructor is called to construct the widget instance. Implement to initialize non-primitive properties.
         constructor: function () {
@@ -182,6 +186,9 @@ define([
                 this._addLeftAddon();
                 this._addRightAddon();
                 this._addRightButtonAddon();
+				this._addTooltip();
+
+
 
                 dojoClass.add(this.inputDiv, this._getInputDivClass());
 
@@ -253,8 +260,35 @@ define([
             }
         },
 
-        _getLabelCaption: function () {
+        _addTooltip: function() {
+            if(this.tooltipText.length == 0) {
+                return;
+            }
+            var position = "after";
+            var positionNode = this.inputDiv;
+			var horizontalClass = "";
 
+			if(this.formOrientation === "horizontal") {
+				this._tooltipSpace = 1;
+				horizontalClass= "col-sm-1";
+            }
+            if(this.tooltipPosition === "behindCaption") {
+               position = "before";
+               positionNode = this.inputDiv;
+            }
+			dojoConstruct.destroy(this._toolTipNode);
+			this._toolTipNode = dojoConstruct.create("span", {
+				"class": "glyphicon glyphicon-question-sign explain " + horizontalClass,
+				"data-content": this.tooltipText,
+				"data-toggle" :"popover",
+				"data-trigger":"hover",
+                "data-placement": (this.formOrientation === "horizontal" && this.tooltipPosition !== "behindValue" ) ? "bottom": "right"
+			});
+			dojoConstruct.place(this._toolTipNode, positionNode, position);
+			this.jQuery(this._toolTipNode).popover();
+        },
+
+        _getLabelCaption: function () {
             var replaceFunction = dojoLang.hitch(this, function(replaceString, firstMatch, secondMatch) {
                 var attributeValue = this._contextObj.get(secondMatch);
                 return replaceString.replace(firstMatch, attributeValue);
@@ -287,7 +321,7 @@ define([
 
         _getInputDivClass: function () {
             if (this.formOrientation == "horizontal") {
-                return "col-sm-" + (12 - this.labelWidth);
+                return "col-sm-" + (12 - this.labelWidth - this._tooltipSpace);
             }
 
             return "";

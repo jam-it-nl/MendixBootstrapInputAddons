@@ -132,6 +132,20 @@
             <category>Appearance</category>
             <description/>
         </property>
+        <property defaultValue="" key="tooltipText" required="false" type="string">
+            <caption>Tooltip text</caption>
+            <category>Appearance</category>
+            <description/>
+        </property>
+        <property defaultValue="behindCaption" key="tooltipPosition" type="enumeration">
+            <caption>Tooltip position</caption>
+            <category>Appearance</category>
+            <description/>
+            <enumerationValues>
+                <enumerationValue key="behindCaption">behind label caption</enumerationValue>
+                <enumerationValue key="behindValue">behind value</enumerationValue>
+            </enumerationValues>
+        </property>
         <property defaultValue="false" key="showLeftAddon" required="true" type="boolean">
             <caption>Show left add-on</caption>
             <category>Appearance</category>
