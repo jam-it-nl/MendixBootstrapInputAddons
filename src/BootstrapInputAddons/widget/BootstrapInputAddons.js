@@ -264,33 +264,21 @@ define([
             if(this.tooltipText.length == 0) {
                 return;
             }
-            var position = "after";
-            var positionNode = this.inputDiv;
-			var horizontalClass = "";
 
-			if(this.formOrientation === "horizontal") {
-				this._tooltipSpace = 1;
-				horizontalClass= "col-sm-1";
-            }
-            if(this.tooltipPosition === "behindCaption") {
-               position = "before";
-               positionNode = this.inputDiv;
-               this._labelNode.className += " hasExplain";
-            }else if(this.tooltipPosition !== "behindCaption" && this.formOrientation !== "horizontal") {
-				this.inputNode.className += " hasExplain";
-				positionNode = this.inputNode;
-			} else {
-				this.inputNodes.className += " hasExplain";
-			}
 			dojoConstruct.destroy(this._toolTipNode);
 			this._toolTipNode = dojoConstruct.create("span", {
-				"class": "glyphicon glyphicon-question-sign explain " + horizontalClass,
+				"class": "glyphicon glyphicon-question-sign explain ", //+ horizontalClass,
 				"data-content": this.tooltipText,
 				"data-toggle" :"popover",
 				"data-trigger":"hover",
-                "data-placement": (this.formOrientation === "horizontal" && this.tooltipPosition !== "behindValue" ) ? "bottom": "right"
+				"data-placement": (this.formOrientation === "horizontal" && this.tooltipPosition !== "behindValue" ) ? "bottom": "right"
 			});
-			dojoConstruct.place(this._toolTipNode, positionNode, position);
+
+			if(this.tooltipPosition === "behindCaption") {
+				this._labelNode.appendChild(this._toolTipNode);
+			} else {
+				this.inputNodes.appendChild(this._toolTipNode);
+			}
 			this.jQuery(this._toolTipNode).popover();
         },
 
@@ -327,7 +315,7 @@ define([
 
         _getInputDivClass: function () {
             if (this.formOrientation == "horizontal") {
-                return "col-sm-" + (12 - this.labelWidth - this._tooltipSpace);
+                return "col-sm-" + (12 - this.labelWidth);
             }
 
             return "";

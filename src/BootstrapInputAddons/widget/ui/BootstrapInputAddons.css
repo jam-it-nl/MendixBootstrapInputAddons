@@ -1,15 +1,8 @@
 .bootstrapinputaddons [data-dojo-attach-point=inputNodes] .explain {
     display: table-cell;
     vertical-align: middle;
-    padding-left: 0.3em;
 }
 
-.bootstrapinputaddons .explain.col-sm-1,
-.bootstrapinputaddons .control-label + [data-dojo-attach-point=inputDiv] + .explain {
-    padding-top:6px;
-    padding-left:0px !important;
-}
-
-.bootstrapinputaddons .hasExplain {
-    padding-right:0.3em !important;
+.bootstrapinputaddons .explain {
+    padding-left:0.3em;
 }
