@@ -271,6 +271,7 @@ define([
 				"data-content": this.tooltipText,
 				"data-toggle" :"popover",
 				"data-trigger":"hover",
+				"data-container": "body",
 				"data-placement": (this.formOrientation === "horizontal" && this.tooltipPosition !== "behindValue" ) ? "bottom": "right"
 			});
 
