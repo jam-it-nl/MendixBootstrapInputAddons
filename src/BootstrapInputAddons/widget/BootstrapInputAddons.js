@@ -275,7 +275,13 @@ define([
             if(this.tooltipPosition === "behindCaption") {
                position = "before";
                positionNode = this.inputDiv;
-            }
+               this._labelNode.className += " hasExplain";
+            }else if(this.tooltipPosition !== "behindCaption" && this.formOrientation !== "horizontal") {
+				this.inputNode.className += " hasExplain";
+				positionNode = this.inputNode;
+			} else {
+				this.inputNodes.className += " hasExplain";
+			}
 			dojoConstruct.destroy(this._toolTipNode);
 			this._toolTipNode = dojoConstruct.create("span", {
 				"class": "glyphicon glyphicon-question-sign explain " + horizontalClass,
