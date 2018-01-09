@@ -16,6 +16,7 @@ To use the widget, place it in a Entity context (like a dataview) and configure 
 * onChange, onEnter and onLeave events
 * Visibility and editable parameter
 * Use of variables in the label (syntax: {attributeName})
+* Optional show a question text before or after the input field
 
 ## Limitations
 * Buttons, checkboxes, radiobuttons and dropdowns (as add-on) are not yet implemented
