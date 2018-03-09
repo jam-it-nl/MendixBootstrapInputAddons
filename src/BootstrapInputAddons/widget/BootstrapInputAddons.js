@@ -28,7 +28,7 @@ define([
     "dojo/dom-attr",
     "dojo/_base/array",
     "dojo/_base/lang",
-    "dojo/html", 
+    "dojo/html",
     "dojo/_base/event",
     "dojo/text!BootstrapInputAddons/widget/template/BootstrapInputAddons.html",
     "BootstrapInputAddons/lib/jquery-1.11.2"
@@ -58,10 +58,11 @@ define([
         readOnlyMode: "",
         editableAttribute: "",
         showLabel: "",
-		tooltipText: "",
-		tooltipPosition: "",
+        tooltipText: "",
+        tooltipPosition: "",
         labelCaption: "",
         negativeLabelCaption: "",
+        negativeClass: "",
         showLeftAddon: "",
         leftAddonCaption: "",
         showRightAddon: "",
@@ -181,14 +182,17 @@ define([
 
                 var value = this._getFormattedValueFromContextObject(this.fieldAttribute);
                 this.inputNode.value = value;
+ 
+                var originalValue = this._contextObj.get(this.fieldAttribute);
+                if (originalValue < 0) {
+                    dojoClass.add(this.formGroupNode, this.negativeClass);
+                }
 
                 this._addLabel();
                 this._addLeftAddon();
                 this._addRightAddon();
                 this._addRightButtonAddon();
-				this._addTooltip();
-
-
+                this._addTooltip();
 
                 dojoClass.add(this.inputDiv, this._getInputDivClass());
 
@@ -213,7 +217,7 @@ define([
             this._clearValidations();
 
             // Show validation messages if the widget was already on the page            
-            if (oldValidationShown && !this._isValid()){
+            if (oldValidationShown && !this._isValid()) {
                 this._addValidation(this._validationMessage);
             }
         },
@@ -228,8 +232,8 @@ define([
                 }
 
                 var value = this._contextObj.get(attribute);
-                if (this.showNegativeAsPositive){
-                    if (value < 0){
+                if (this.showNegativeAsPositive) {
+                    if (value < 0) {
                         value = -1 * value;
                     }
                 }
@@ -260,31 +264,31 @@ define([
             }
         },
 
-        _addTooltip: function() {
-            if(this.tooltipText.length == 0) {
+        _addTooltip: function () {
+            if (this.tooltipText.length == 0) {
                 return;
             }
 
-			dojoConstruct.destroy(this._toolTipNode);
-			this._toolTipNode = dojoConstruct.create("span", {
-				"class": "glyphicon glyphicon-question-sign explain ", //+ horizontalClass,
-				"data-content": this.tooltipText,
-				"data-toggle" :"popover",
-				"data-trigger":"hover",
-				"data-container": "body",
-				"data-placement": (this.formOrientation === "horizontal" && this.tooltipPosition !== "behindValue" ) ? "bottom": "right"
-			});
+            dojoConstruct.destroy(this._toolTipNode);
+            this._toolTipNode = dojoConstruct.create("span", {
+                "class": "glyphicon glyphicon-question-sign explain ", //+ horizontalClass,
+                "data-content": this.tooltipText,
+                "data-toggle": "popover",
+                "data-trigger": "hover",
+                "data-container": "body",
+                "data-placement": (this.formOrientation === "horizontal" && this.tooltipPosition !== "behindValue") ? "bottom" : "right"
+            });
 
-			if(this.tooltipPosition === "behindCaption") {
-				this._labelNode.appendChild(this._toolTipNode);
-			} else {
-				this.inputNodes.appendChild(this._toolTipNode);
-			}
-			this.jQuery(this._toolTipNode).popover();
+            if (this.tooltipPosition === "behindCaption") {
+                this._labelNode.appendChild(this._toolTipNode);
+            } else {
+                this.inputNodes.appendChild(this._toolTipNode);
+            }
+            this.jQuery(this._toolTipNode).popover();
         },
 
         _getLabelCaption: function () {
-            var replaceFunction = dojoLang.hitch(this, function(replaceString, firstMatch, secondMatch) {
+            var replaceFunction = dojoLang.hitch(this, function (replaceString, firstMatch, secondMatch) {
                 var attributeValue = this._contextObj.get(secondMatch);
                 return replaceString.replace(firstMatch, attributeValue);
             });
@@ -292,7 +296,7 @@ define([
             var expression = /({(.+?)})/g;
 
             var label = this.labelCaption;
-            if (this.showNegativeAsPositive){
+            if (this.showNegativeAsPositive) {
                 var value = this._contextObj.get(this.fieldAttribute);
                 if (value < 0) {
                     label = this.negativeLabelCaption;
@@ -414,7 +418,7 @@ define([
 
         _isValidationShown: function () {
             logger.debug(this.id + "._isValidationShown");
-            return (this._alertDiv != null);            
+            return (this._alertDiv != null);
         },
 
         // Clear validations.
@@ -444,7 +448,7 @@ define([
         _isValid: function () {
             logger.debug(this.id + "._isValid " + this.fieldAttribute);
 
-            
+
             if (this._isEditable() && this.inputNode) {
                 var value = this.inputNode.value;
 
@@ -522,14 +526,14 @@ define([
             // Check validations
             var isValid = this._isValid();
 
-            if (this.onChangeAbortOnValidationErrors == "no" || isValid){
+            if (this.onChangeAbortOnValidationErrors == "no" || isValid) {
                 // Set attribute value
                 this._setValueInContextObject(this.fieldAttribute, this.inputNode.value);
 
                 // Call "on change" microflow
                 this._callMicroflow(this.onChange);
-            }else {
-                if (!isValid){
+            } else {
+                if (!isValid) {
                     this._addValidation(this._validationMessage);
                 }
             }
@@ -571,7 +575,7 @@ define([
                     },
                     callback: dojoLang.hitch(this, function (obj) {
                         // Is called wHen all is ok
-                        if (!this._isValid()){
+                        if (!this._isValid()) {
                             this._addValidation(this._validationMessage);
                         }
                     }),
@@ -588,14 +592,14 @@ define([
 
         _isEditable: function () {
             switch (this.editable) {
-            case "default":
-                return !this.readOnly;
-            case "never":
-                return false;
-            case "conditionally":
-                if (this._contextObj !== null) {
-                    return this._contextObj.get(this.editableAttribute);
-                }
+                case "default":
+                    return !this.readOnly;
+                case "never":
+                    return false;
+                case "conditionally":
+                    if (this._contextObj !== null) {
+                        return this._contextObj.get(this.editableAttribute);
+                    }
             }
 
             return false;

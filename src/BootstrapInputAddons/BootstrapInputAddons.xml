@@ -62,6 +62,11 @@
             <category>Behaviour</category>
             <description>Label caption for a negative number that is shown as positive</description>
         </property>
+        <property defaultValue="" key="negativeClass" required="false" type="string">
+            <caption>Css class to use when number is negative</caption>
+            <category>Behaviour</category>
+            <description/>
+        </property>
         <property key="visibilityAttribute" required="false" type="attribute">
             <caption>Visible</caption>
             <category>Appearance</category>
