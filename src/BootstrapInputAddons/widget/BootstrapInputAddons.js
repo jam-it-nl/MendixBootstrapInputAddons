@@ -186,6 +186,8 @@ define([
                 var originalValue = this._contextObj.get(this.fieldAttribute);
                 if (originalValue < 0) {
                     dojoClass.add(this.formGroupNode, this.negativeClass);
+                } else {
+                    dojoClass.remove(this.formGroupNode, this.negativeClass);
                 }
 
                 this._addLabel();
