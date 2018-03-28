@@ -17,7 +17,7 @@
 
 define([
     "dojo/_base/declare",
-    // "mendix/validator",
+    "mendix/validator",
     "mxui/widget/_WidgetBase",
     "dijit/_TemplatedMixin",
 
@@ -32,7 +32,7 @@ define([
     "dojo/_base/event",
     "dojo/text!BootstrapInputAddons/widget/template/BootstrapInputAddons.html",
     "BootstrapInputAddons/lib/jquery-1.11.2"
-], function (declare, /*validator,*/ _WidgetBase, _TemplatedMixin, dojo, dojoClass, dojoStyle, dojoConstruct, dojoAttr, dojoArray, dojoLang, dojoHtml, dojoEvent, widgetTemplate, jQuery) {
+], function (declare, validator, _WidgetBase, _TemplatedMixin, dojo, dojoClass, dojoStyle, dojoConstruct, dojoAttr, dojoArray, dojoLang, dojoHtml, dojoEvent, widgetTemplate, jQuery) {
     "use strict";
 
     // Declare widget's prototype.
@@ -475,18 +475,6 @@ define([
                     }
                 }
 
-                // Validate for valid numbers
-                if (this._contextObj.isNumeric(this.fieldAttribute)) {
-                    var unformattedValue = this._getUnformattedValue(this.fieldAttribute, value);
-                    if (unformattedValue == null) {
-                        this._validationMessage = "Ongeldig nummer";
-                        return false;
-                    }
-                }
-
-
-                /*
-                // Should be done like this, but there is a bug in Mendix preventing the use of validator
                 var isValidNumber = true;
                 try {
                     if (this._contextObj.isNumeric(this.fieldAttribute)) {
@@ -502,9 +490,13 @@ define([
                 if (!isValidNumber) {
                     logger.debug(this.id + "._isValid number false");
 
-                    this._validationMessage = "Ongeldig nummer";
+                    if (mx.session.sessionData.locale.code == "nl_NL"){
+                        this._validationMessage = "Ongeldig nummer";
+                    }else {
+                        this._validationMessage = "Invalid number";
+                    }
                     return false;
-                }*/
+                }
 
             }
 
@@ -562,18 +554,13 @@ define([
             this._callMicroflow(this.onClick);
         },
 
-        // Call MicroFlow
         _callMicroflow: function (microflow) {
             logger.debug(this.id + "._callMicroflow");
-            if (microflow !== "") {
-                mx.data.action({
+            if (microflow) {
+                mx.ui.action(microflow, {
                     params: {
                         applyto: "selection",
-                        actionname: microflow,
                         guids: [this._contextObj.getGuid()]
-                    },
-                    store: {
-                        caller: this.mxform
                     },
                     callback: dojoLang.hitch(this, function (obj) {
                         // Is called wHen all is ok
