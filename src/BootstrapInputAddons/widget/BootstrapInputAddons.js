@@ -197,17 +197,52 @@ define([
                 this._addTooltip();
 
                 dojoClass.add(this.inputDiv, this._getInputDivClass());
-
-                if (!this._isEditable() && this.readOnlyMode == "textControl") {
-                    dojoAttr.set(this.inputNode, "disabled", "disabled");
-                }
-
-                if (!this._isEmptyString(this.placeholderText)) {
-                    dojoAttr.set(this.inputNode, "placeholder", this.placeholderText);
-                }
-
-                if (!this._isEditable() && this.readOnlyMode == "textLabel") {
-                    this._setReadOnlyValue(value);
+                
+                if (this._contextObj.getAttributeType(this.fieldAttribute) === "Enum"){
+                	
+                	
+                	dojoAttr.set(this.inputNodes, "role", "radiogroup");
+                	dojoConstruct.empty(this.inputNodes);
+                	
+                	
+                	var enumMap = this._contextObj.getEnumMap(this.fieldAttribute);
+                	var inputTypeName = Math.floor((Math.random() * 1000000));
+                	var arrayLength = enumMap.length;
+                	for (var i = 0; i < arrayLength; i++) {
+                	    
+                	    
+                	    var radioDiv = dojoConstruct.create("div", {
+                            "class": "radio"
+                        });
+                	    
+                	    var radioLabel = dojoConstruct.create("label", {
+                	    	"innerHTML": enumMap[i].caption
+                	    });
+                	    var radioInput = dojoConstruct.create("input", {
+                	    	"type": "radio",
+                	    	"name": inputTypeName,
+                	    	"value": enumMap[i].key
+                        });
+                	    
+                	    dojoConstruct.place(radioInput, radioLabel, 'first');
+                	    dojoConstruct.place(radioLabel, radioDiv);
+                	    dojoConstruct.place(radioDiv, this.inputNodes);
+                	    
+                	}
+                	
+                	
+                }else{
+                	if (!this._isEditable() && this.readOnlyMode == "textControl") {
+	                    dojoAttr.set(this.inputNode, "disabled", "disabled");
+	                }
+	
+	                if (!this._isEmptyString(this.placeholderText)) {
+	                    dojoAttr.set(this.inputNode, "placeholder", this.placeholderText);
+	                }
+	
+	                if (!this._isEditable() && this.readOnlyMode == "textLabel") {
+	                    this._setReadOnlyValue(value);
+	                }
                 }
 
             } else {
