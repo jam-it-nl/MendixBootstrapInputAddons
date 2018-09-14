@@ -28,6 +28,10 @@ For any request or bug please create an issue at [GitHub](https://github.com/JAM
 * npm install
 * gulp
 
+# Update dependencies
+* npm install mendixmodelsdk mendixplatformsdk when --save
+* npm install del gulp gulp-if gulp-intercept gulp-json-transform gulp-jsvalidate gulp-newer gulp-plumber gulp-util gulp-zip widgetbuilder-gulp-helper yargs --save-dev
+
 # Run unittest
 Start webserver (in project root)
 * python -m SimpleHTTPServer &
