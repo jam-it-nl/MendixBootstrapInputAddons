@@ -159,8 +159,8 @@ define([
         _setupEvents: function () {
             logger.debug(this.id + "._setupEvents");
 
-            this.connect(this.inputNode, "change", function (e) {
-                this._onChange();
+            this.connect(this.inputNode, "change", function (event) {
+                this._onChange(event);
             });
 
             this.connect(this.inputNode, "focus", function (e) {
@@ -200,36 +200,7 @@ define([
                 
                 if (this._contextObj.getAttributeType(this.fieldAttribute) === "Enum"){
                 	
-                	
-                	dojoAttr.set(this.inputNodes, "role", "radiogroup");
-                	dojoConstruct.empty(this.inputNodes);
-                	
-                	
-                	var enumMap = this._contextObj.getEnumMap(this.fieldAttribute);
-                	var inputTypeName = Math.floor((Math.random() * 1000000));
-                	var arrayLength = enumMap.length;
-                	for (var i = 0; i < arrayLength; i++) {
-                	    
-                	    
-                	    var radioDiv = dojoConstruct.create("div", {
-                            "class": "radio"
-                        });
-                	    
-                	    var radioLabel = dojoConstruct.create("label", {
-                	    	"innerHTML": enumMap[i].caption
-                	    });
-                	    var radioInput = dojoConstruct.create("input", {
-                	    	"type": "radio",
-                	    	"name": inputTypeName,
-                	    	"value": enumMap[i].key
-                        });
-                	    
-                	    dojoConstruct.place(radioInput, radioLabel, 'first');
-                	    dojoConstruct.place(radioLabel, radioDiv);
-                	    dojoConstruct.place(radioDiv, this.inputNodes);
-                	    
-                	}
-                	
+                	this._addEnum();
                 	
                 }else{
                 	if (!this._isEditable() && this.readOnlyMode == "textControl") {
@@ -288,6 +259,45 @@ define([
         _setValueInContextObject: function (attribute, formattedValue) {
             var unformattedValue = this._getUnformattedValue(attribute, formattedValue);
             this._contextObj.set(attribute, unformattedValue);
+        },
+        
+        _addEnum: function () {
+        	dojoAttr.set(this.inputNodes, "role", "radiogroup");
+        	dojoConstruct.empty(this.inputNodes);
+        	
+        	
+        	var enumMap = this._contextObj.getEnumMap(this.fieldAttribute);
+        	var inputTypeName = Math.floor((Math.random() * 1000000));
+        	var arrayLength = enumMap.length;
+        	for (var i = 0; i < arrayLength; i++) {
+        	    
+        	    
+        	    var radioDiv = dojoConstruct.create("div", {
+                    "class": "radio"
+                });
+        	    
+        	    var radioLabel = dojoConstruct.create("label", {
+        	    	"innerHTML": enumMap[i].caption
+        	    });
+        	    var radioInput = dojoConstruct.create("input", {
+        	    	"type": "radio",
+        	    	"name": inputTypeName,
+        	    	"value": enumMap[i].key
+                });
+        	    
+        	    if (this._contextObj.get(this.fieldAttribute) === enumMap[i].key){
+        	    	dojoAttr.set(radioInput, "checked", "checked");
+        	    }
+        	    
+        	    dojoConstruct.place(radioInput, radioLabel, 'first');
+        	    dojoConstruct.place(radioLabel, radioDiv);
+        	    dojoConstruct.place(radioDiv, this.inputNodes);
+        	    
+        	    this.connect(radioInput, "change", function (event) {
+                    this._onChange(event);
+                });
+        	    
+        	}            
         },
 
         _addLabel: function () {
@@ -480,14 +490,30 @@ define([
             dojoConstruct.place(this._alertDiv, this.inputDiv, "last");
             dojoClass.add(this.inputDiv, "has-error");
         },
+        
+        _getCurrentValue: function () {
+        	var currentValue = this.inputNode.value;;
+            
+            if (this._contextObj.getAttributeType(this.fieldAttribute) === "Enum"){
+            	for (var i = 0; i < this.inputNodes.children.length; i++) { 
+            		var element = this.inputNodes.children[i];
+            		var radioElement = element.firstElementChild.firstElementChild;
+            		if (radioElement.checked){
+            			return radioElement.value;
+            		}
+            	}
+            }
+            
+            return currentValue;
+        },
 
         // Check if validates
         _isValid: function () {
             logger.debug(this.id + "._isValid " + this.fieldAttribute);
 
+            var value = this._getCurrentValue();
 
-            if (this._isEditable() && this.inputNode) {
-                var value = this.inputNode.value;
+            if (this._isEditable() && this.inputNode) {                
 
                 // Check for required
                 if (this.isRequired) {
@@ -549,7 +575,7 @@ define([
         },
 
         // FieldEvent: onChange
-        _onChange: function () {
+        _onChange: function (event) {
             logger.debug(this.id + "._onChange");
 
             // Check validations
@@ -557,7 +583,7 @@ define([
 
             if (this.onChangeAbortOnValidationErrors == "no" || isValid) {
                 // Set attribute value
-                this._setValueInContextObject(this.fieldAttribute, this.inputNode.value);
+                this._setValueInContextObject(this.fieldAttribute, this._getCurrentValue());
 
                 // Call "on change" microflow
                 this._callMicroflow(this.onChange);
