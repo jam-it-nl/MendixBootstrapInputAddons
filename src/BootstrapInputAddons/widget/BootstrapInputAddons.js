@@ -252,8 +252,21 @@ define([
             return mx.parser.formatAttribute(this._contextObj, attribute);
         },
 
-        _getUnformattedValue: function (attribute, formattedValue) {
+        _getUnformattedValue: function (attribute, formattedValue) {      	
+        	if (typeof formattedValue !== 'undefined' && (typeof formattedValue === 'string' || formattedValue instanceof String) && this._contextObj.isNumeric(attribute)){
+        		// Remove thousand separators
+        		formattedValue = formattedValue.replace(new RegExp(`\\${this._getThousandSeparator()}`, 'g'), '')
+        	}
+        	      	
             return mx.parser.parseValue(formattedValue, this._contextObj.getAttributeType(attribute));
+        },
+        
+        _getThousandSeparator: function () {
+            const numberWithGroupAndDecimalSeparator = 1000.1;
+            return Intl.NumberFormat(mx.session.sessionData.locale.code.replace('_','-'))
+                .formatToParts(numberWithGroupAndDecimalSeparator)
+                .find(part => part.type === 'group')
+                .value;
         },
 
         _setValueInContextObject: function (attribute, formattedValue) {
