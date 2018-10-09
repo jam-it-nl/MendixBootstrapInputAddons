@@ -255,18 +255,25 @@ define([
         _getUnformattedValue: function (attribute, formattedValue) {      	
         	if (typeof formattedValue !== 'undefined' && (typeof formattedValue === 'string' || formattedValue instanceof String) && this._contextObj.isNumeric(attribute)){
         		// Remove thousand separators
-        		formattedValue = formattedValue.replace(new RegExp(`\\${this._getThousandSeparator()}`, 'g'), '')
+        		formattedValue = formattedValue.replace(new RegExp('\\' + this._getThousandSeparator(), 'g'), '')
         	}
         	      	
             return mx.parser.parseValue(formattedValue, this._contextObj.getAttributeType(attribute));
         },
         
-        _getThousandSeparator: function () {
-            const numberWithGroupAndDecimalSeparator = 1000.1;
-            return Intl.NumberFormat(mx.session.sessionData.locale.code.replace('_','-'))
-                .formatToParts(numberWithGroupAndDecimalSeparator)
-                .find(part => part.type === 'group')
-                .value;
+        _getThousandSeparator: function () {       	
+        	try {
+        		const numberWithGroupAndDecimalSeparator = 1000.1;
+                return Intl.NumberFormat(mx.session.sessionData.locale.code.replace('_','-'))
+                    .formatToParts(numberWithGroupAndDecimalSeparator)
+                    .find(function(part){return part.type === 'group'})
+                    .value;
+            } catch (exception) {
+                if (mx.session.sessionData.locale.code === 'nl_NL'){
+                	return '.';
+                }
+                return ',';
+            }   
         },
 
         _setValueInContextObject: function (attribute, formattedValue) {
