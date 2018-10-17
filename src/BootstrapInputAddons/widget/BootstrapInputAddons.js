@@ -198,10 +198,8 @@ define([
 
                 dojoClass.add(this.inputDiv, this._getInputDivClass());
                 
-                if (this._contextObj.getAttributeType(this.fieldAttribute) === "Enum"){
-                	
+                if (this._contextObj.getAttributeType(this.fieldAttribute) === "Enum" && this._isEditable()){
                 	this._addEnum();
-                	
                 }else{
                 	if (!this._isEditable() && this.readOnlyMode == "textControl") {
 	                    dojoAttr.set(this.inputNode, "disabled", "disabled");
