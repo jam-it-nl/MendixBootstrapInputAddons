@@ -510,9 +510,7 @@ define([
         },
         
         _getCurrentValue: function () {
-        	var currentValue = this.inputNode.value;;
-            
-            if (this._contextObj.getAttributeType(this.fieldAttribute) === "Enum"){
+            if (this._contextObj.getAttributeType(this.fieldAttribute) === "Enum" && this._isEditable()){
             	for (var i = 0; i < this.inputNodes.children.length; i++) { 
             		var element = this.inputNodes.children[i];
             		var radioElement = element.firstElementChild.firstElementChild;
@@ -522,6 +520,7 @@ define([
             	}
             }
             
+            var currentValue = this.inputNode.value;
             return currentValue;
         },
 
