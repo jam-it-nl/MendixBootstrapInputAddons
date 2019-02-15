@@ -677,19 +677,14 @@ define([
         _resetSubscriptions: function () {
             logger.debug(this.id + "._resetSubscriptions");
             // Release handles on previous object, if any.
-            if (this._handles) {
-                dojoArray.forEach(this._handles, function (handle) {
-                    mx.data.unsubscribe(handle);
-                });
-                this._handles = [];
-            }
+            this.unsubscribeAll();
 
             if (this._formValidateListener) {
                 this.mxform.unlisten(this._formValidateListener);
             }
 
             // When a mendix object exists and is visible create subscribtions.
-            if (this._isVisible()) {
+            if (this._contextObj && this._isVisible()) {
                 this._formValidateListener = this.mxform.listen("validate", dojoLang.hitch(this, function (callback, error) {
                     logger.debug(this.id + ".validate");
                     if (this._isValid()) {
@@ -719,8 +714,6 @@ define([
                     val: true,
                     callback: dojoLang.hitch(this, this._handleValidation)
                 });
-
-                this._handles = [objectHandle, attrHandle, validationHandle];
             }
         }
     });
