@@ -194,7 +194,12 @@ define([
                 this._addLeftAddon();
                 this._addRightAddon();
                 this._addRightButtonAddon();
-                this._addTooltip();
+
+                if (this.tooltipPosition === "behindCaption") {
+                    this._addTooltip(this._labelNode);
+                } else {
+                    this._addTooltip(this.inputNodes);
+                }
 
                 dojoClass.add(this.inputDiv, this._getInputDivClass());
                 
@@ -329,29 +334,6 @@ define([
             }
         },
 
-        _addTooltip: function () {
-            if (this.tooltipText.length == 0) {
-                return;
-            }
-
-            dojoConstruct.destroy(this._toolTipNode);
-            this._toolTipNode = dojoConstruct.create("span", {
-                "class": "glyphicon glyphicon-question-sign explain ", //+ horizontalClass,
-                "data-content": this.tooltipText,
-                "data-toggle": "popover",
-                "data-trigger": "hover",
-                "data-container": "body",
-                "data-placement": (this.formOrientation === "horizontal" && this.tooltipPosition !== "behindValue") ? "bottom" : "right"
-            });
-
-            if (this.tooltipPosition === "behindCaption") {
-                this._labelNode.appendChild(this._toolTipNode);
-            } else {
-                this.inputNodes.appendChild(this._toolTipNode);
-            }
-            this.jQuery(this._toolTipNode).popover();
-        },
-
         _getLabelCaption: function () {
             var replaceFunction = dojoLang.hitch(this, function (replaceString, firstMatch, secondMatch) {
                 var attributeValue = this._contextObj.get(secondMatch);
@@ -465,6 +447,31 @@ define([
                 });
                 dojoConstruct.place(readOnlyField, this.domNode, "only");
             }
+
+            if (this.tooltipPosition === "behindCaption") {
+                this._addTooltip(this.inputNodes);
+            } else {
+                this._addTooltip(this.domNode);
+            }
+        },
+
+        _addTooltip: function (node) {
+            if (this.tooltipText.length == 0) {
+                return;
+            }
+
+            dojoConstruct.destroy(this._toolTipNode);
+            this._toolTipNode = dojoConstruct.create("span", {
+                "class": "glyphicon glyphicon-question-sign explain ",
+                "data-content": this.tooltipText,
+                "data-toggle": "popover",
+                "data-trigger": "hover",
+                "data-container": "body",
+                "data-placement": (this.formOrientation === "horizontal" && this.tooltipPosition !== "behindValue") ? "bottom" : "right"
+            });
+
+            node.appendChild(this._toolTipNode);
+            this.jQuery(this._toolTipNode).popover();
         },
 
         // Handle validations.
