@@ -446,11 +446,6 @@ define([
                     "innerHTML": value
                 });
                 dojoConstruct.place(readOnlyField, this.domNode, "only");
-            }
-
-            if (this.tooltipPosition === "behindCaption") {
-                this._addTooltip(this.inputNodes);
-            } else {
                 this._addTooltip(this.domNode);
             }
         },
