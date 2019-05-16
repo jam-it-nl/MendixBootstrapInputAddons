@@ -18,7 +18,7 @@
             <category>Appearance</category>
             <description/>
         </property>
-        <property key="fieldAttribute" type="attribute" required="false">
+        <property key="fieldAttribute" type="attribute" required="true">
             <caption>Attribute (path)</caption>
             <category>Appearance</category>
             <description/>

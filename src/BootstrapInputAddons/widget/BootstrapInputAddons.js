@@ -205,6 +205,23 @@ define([
                 
                 if (this._contextObj.getAttributeType(this.fieldAttribute) === "Enum" && this._isEditable()){
                 	this._addEnum();
+                }else if (this._contextObj.getAttributeType(this.fieldAttribute) === "Boolean" && this._isEditable() && this.formOrientation == "horizontal"){
+                    dojoClass.add(this.inputDiv, "checkbox");
+                    dojoConstruct.place(this._labelNode, this.inputNodes, "first");
+                    dojoConstruct.place(this.inputNode, this._labelNode, "first");
+                    dojoAttr.set(this.inputNode, "type", "checkbox");
+                    dojoAttr.remove(this.inputNode, "class");
+                    dojoAttr.remove(this.inputNode, "value");
+
+                    dojoClass.remove(this._labelNode, this._getLabelClass());
+                    dojoClass.add(this._labelNode, "control-label");                    
+                    dojoClass.add(this.inputDiv, this._getInputDivOffsetClass());
+
+                    dojoStyle.set(this._toolTipNode, "display", "inline");
+                    dojoStyle.set(this._toolTipNode, "vertical-align", "unset");
+
+                    this.inputNode.checked = originalValue;
+                    
                 }else{
                 	if (!this._isEditable() && this.readOnlyMode == "textControl") {
 	                    dojoAttr.set(this.inputNode, "disabled", "disabled");
@@ -259,7 +276,11 @@ define([
         	if (typeof formattedValue !== 'undefined' && (typeof formattedValue === 'string' || formattedValue instanceof String) && this._contextObj.isNumeric(attribute)){
         		// Remove thousand separators
         		formattedValue = formattedValue.replace(new RegExp('\\' + this._getThousandSeparator(), 'g'), '')
-        	}
+            }
+            
+            if (this._contextObj.getAttributeType(this.fieldAttribute) === "Boolean"){
+                return formattedValue;
+            }
         	      	
             return mx.parser.parseValue(formattedValue, this._contextObj.getAttributeType(attribute));
         },
@@ -368,6 +389,14 @@ define([
         _getInputDivClass: function () {
             if (this.formOrientation == "horizontal") {
                 return "col-sm-" + (12 - this.labelWidth);
+            }
+
+            return "";
+        },
+
+        _getInputDivOffsetClass: function () {
+            if (this.formOrientation == "horizontal") {
+                return "col-sm-offset-" + (12 - this.labelWidth);
             }
 
             return "";
@@ -520,6 +549,10 @@ define([
             			return radioElement.value;
             		}
             	}
+            }
+
+            if (this._contextObj.getAttributeType(this.fieldAttribute) === "Boolean" && this._isEditable() && this.formOrientation == "horizontal"){
+                return this.inputNode.checked;
             }
             
             var currentValue = this.inputNode.value;
