@@ -6,9 +6,9 @@
   "author": "Martijn Raats",
   "private": true,
   "dependencies": {
-    "mendixmodelsdk": "^4.15.0",
-    "mendixplatformsdk": "^4.0.0",
-    "npm": "^6.1.0",
+    "mendixmodelsdk": "^4.20.0",
+    "mendixplatformsdk": "^4.1.0",
+    "npm": "^6.9.0",
     "when": "^3.7.8"
   },
   "devDependencies": {
