@@ -308,10 +308,13 @@ define([
             var enumMap = this._contextObj.getEnumMap(this.fieldAttribute);
         	for (var i = 0; i < enumMap.length; i++) {
                 var key = enumMap[i].key;
-                var regExp = new RegExp(this.hideEnumregEx);
-                if (!regExp.test(key)) {
-                    this._addSingleOption(enumMap[i].caption, key, this.inputNode);
+                if (!this._isEmptyString(this.hideEnumregEx)){
+                    var regExp = new RegExp(this.hideEnumregEx);
+                    if (regExp.test(key)) {
+                        continue;
+                    }
                 }
+                this._addSingleOption(enumMap[i].caption, key, this.inputNode);
             }
             
             this.inputNode.value = this._contextObj.get(this.fieldAttribute);
