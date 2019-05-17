@@ -47,6 +47,7 @@ define([
         formGroupNode: null,
 
         // Parameters configured in the Modeler.\
+        hideEnumregEx: "",
         showEnumAs: "",
         formOrientation: "",
         labelWidth: 0,
@@ -306,7 +307,11 @@ define([
             this._addSingleOption("", "", this.inputNode);
             var enumMap = this._contextObj.getEnumMap(this.fieldAttribute);
         	for (var i = 0; i < enumMap.length; i++) {
-                this._addSingleOption(enumMap[i].caption, enumMap[i].key, this.inputNode);
+                var key = enumMap[i].key;
+                var regExp = new RegExp(this.hideEnumregEx);
+                if (!regExp.test(key)) {
+                    this._addSingleOption(enumMap[i].caption, key, this.inputNode);
+                }
             }
             
             this.inputNode.value = this._contextObj.get(this.fieldAttribute);
@@ -598,8 +603,6 @@ define([
                 if (this.useRegExValidation && !this._isEmptyString(value)) {
                     var regExp = new RegExp(this.regEx);
                     if (!regExp.test(value)) {
-                        logger.debug(this.id + "._isValid regex false");
-
                         this._validationMessage = this.regExMessage;
                         return false;
                     }

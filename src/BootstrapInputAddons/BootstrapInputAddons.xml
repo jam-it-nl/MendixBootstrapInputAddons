@@ -46,6 +46,11 @@
                 <enumerationValue key="radio">Radio</enumerationValue>
             </enumerationValues>
         </property>
+        <property defaultValue="" key="hideEnumregEx" required="false" type="string">
+            <caption>Hide enum</caption>
+            <category>Appearance</category>
+            <description>Hide enum values matching regular expression</description>
+        </property>
         <property defaultValue="" key="placeholderText" required="false" type="string">
             <caption>Placeholder text</caption>
             <category>Appearance</category>
