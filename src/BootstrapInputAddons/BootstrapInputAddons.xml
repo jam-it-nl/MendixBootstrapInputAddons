@@ -37,6 +37,15 @@
                 <attributeType name="Long"/>
             </attributeTypes>
         </property>
+        <property defaultValue="dropdown" key="showEnumAs" type="enumeration">
+            <caption>Show enum as</caption>
+            <category>Appearance</category>
+            <description/>
+            <enumerationValues>
+                <enumerationValue key="dropdown">Drop-down</enumerationValue>
+                <enumerationValue key="radio">Radio</enumerationValue>
+            </enumerationValues>
+        </property>
         <property defaultValue="" key="placeholderText" required="false" type="string">
             <caption>Placeholder text</caption>
             <category>Appearance</category>

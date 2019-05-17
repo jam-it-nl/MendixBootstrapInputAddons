@@ -46,7 +46,8 @@ define([
         inputNode: null,
         formGroupNode: null,
 
-        // Parameters configured in the Modeler.
+        // Parameters configured in the Modeler.\
+        showEnumAs: "",
         formOrientation: "",
         labelWidth: 0,
         placeholderText: "",
@@ -99,23 +100,17 @@ define([
 
         // dojo.declare.constructor is called to construct the widget instance. Implement to initialize non-primitive properties.
         constructor: function () {
-            // Uncomment the following line to enable debug messages
-            // logger.level(logger.DEBUG);
-            logger.debug(this.id + ".constructor");
             this._handles = [];
         },
 
         // dijit._WidgetBase.postCreate is called after constructing the widget. Implement to do extra setup work.
         postCreate: function () {
-            logger.debug(this.id + ".postCreate");
             this._updateRendering();
             this._setupEvents();
         },
 
         // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
         update: function (obj, callback) {
-            logger.debug(this.id + ".update");
-
             this._contextObj = obj;
             this._resetSubscriptions();
             this._updateRendering();
@@ -125,22 +120,18 @@ define([
 
         // mxui.widget._WidgetBase.enable is called when the widget should enable editing. Implement to enable editing if widget is input widget.
         enable: function () {
-            logger.debug(this.id + ".enable");
         },
 
         // mxui.widget._WidgetBase.enable is called when the widget should disable editing. Implement to disable editing if widget is input widget.
         disable: function () {
-            logger.debug(this.id + ".disable");
         },
 
         // mxui.widget._WidgetBase.resize is called when the page's layout is recalculated. Implement to do sizing calculations. Prefer using CSS instead.
         resize: function (box) {
-            logger.debug(this.id + ".resize");
         },
 
         // mxui.widget._WidgetBase.uninitialize is called when the widget is destroyed. Implement to do special tear-down work.
         uninitialize: function () {
-            logger.debug(this.id + ".uninitialize");
             // Clean up listeners, helper objects, etc. There is no need to remove listeners added with this.connect / this.subscribe / this.own.
             if (this._formValidateListener) {
                 this.mxform.unlisten(this._formValidateListener);
@@ -149,7 +140,6 @@ define([
 
         // We want to stop events on a mobile device
         _stopBubblingEventOnMobile: function (e) {
-            logger.debug(this.id + "._stopBubblingEventOnMobile");
             if (typeof document.ontouchstart !== "undefined") {
                 dojoEvent.stop(e);
             }
@@ -157,8 +147,6 @@ define([
 
         // Attach events to HTML dom elements
         _setupEvents: function () {
-            logger.debug(this.id + "._setupEvents");
-
             this.connect(this.inputNode, "change", function (event) {
                 this._onChange(event);
             });
@@ -175,8 +163,6 @@ define([
 
         // Rerender the interface.
         _updateRendering: function () {
-            logger.debug(this.id + "._updateRendering");
-
             if (this._isVisible()) {
                 dojoStyle.set(this.domNode, "display", "block");
 
@@ -204,7 +190,11 @@ define([
                 dojoClass.add(this.inputDiv, this._getInputDivClass());
                 
                 if (this._contextObj.getAttributeType(this.fieldAttribute) === "Enum" && this._isEditable()){
-                	this._addEnum();
+                    if (this.showEnumAs === "radio"){
+                        this._addEnumAsRadio();
+                    }else {
+                        this._addEnumAsDropDown();
+                    }
                 }else if (this._contextObj.getAttributeType(this.fieldAttribute) === "Boolean" && this._isEditable() && this.formOrientation == "horizontal"){
                     dojoClass.add(this.inputDiv, "checkbox");
                     dojoConstruct.place(this._labelNode, this.inputNodes, "first");
@@ -304,11 +294,38 @@ define([
             var unformattedValue = this._getUnformattedValue(attribute, formattedValue);
             this._contextObj.set(attribute, unformattedValue);
         },
+
+        _addEnumAsDropDown: function () {
+            //dojoConstruct.destroy(this.inputNode);
+            var toBeReplaced = this.inputNode;
+            this.inputNode = dojoConstruct.create("select", {
+                "class": "form-control"
+            });
+            dojoConstruct.place(this.inputNode, toBeReplaced, 'replace');
+
+            this._addSingleOption("", "", this.inputNode);
+            var enumMap = this._contextObj.getEnumMap(this.fieldAttribute);
+        	for (var i = 0; i < enumMap.length; i++) {
+                this._addSingleOption(enumMap[i].caption, enumMap[i].key, this.inputNode);
+            }
+            
+            this.inputNode.value = this._contextObj.get(this.fieldAttribute);
+
+            this.connect(this.inputNode, "change", function (event) {
+                this._onChange(event);
+            });
+        },
+
+        _addSingleOption: function(text, key, node) {
+            dojoConstruct.create("option", {
+                    "innerHTML": text,
+                    "value": key
+                }, node);
+        },
         
-        _addEnum: function () {
+        _addEnumAsRadio: function () {
         	dojoAttr.set(this.inputNodes, "role", "radiogroup");
         	dojoConstruct.empty(this.inputNodes);
-        	
         	
         	var enumMap = this._contextObj.getEnumMap(this.fieldAttribute);
         	var inputTypeName = Math.floor((Math.random() * 1000000));
@@ -541,7 +558,7 @@ define([
         },
         
         _getCurrentValue: function () {
-            if (this._contextObj.getAttributeType(this.fieldAttribute) === "Enum" && this._isEditable()){
+            if (this._contextObj.getAttributeType(this.fieldAttribute) === "Enum" && this._isEditable() && this.showEnumAs === "radio"){
             	for (var i = 0; i < this.inputNodes.children.length; i++) { 
             		var element = this.inputNodes.children[i];
             		var radioElement = element.firstElementChild.firstElementChild;
@@ -628,8 +645,6 @@ define([
 
         // FieldEvent: onChange
         _onChange: function (event) {
-            logger.debug(this.id + "._onChange");
-
             // Check validations
             var isValid = this._isValid();
 
