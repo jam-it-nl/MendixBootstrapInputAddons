@@ -242,7 +242,7 @@ define([
         },
 
         _getFormattedValueFromContextObject: function (attribute) {
-            if (this._contextObj.isNumeric(attribute) || this._contextObj.isCurrency(attribute) || this._contextObj.getAttributeType(attribute) === "AutoNumber") {
+            if (this._contextObj.isNumeric(attribute) || this._contextObj.getAttributeType(attribute) === "AutoNumber") {
                 var numberOptions = {};
                 numberOptions.places = this.decimalPrecision;
                 if (this.groupDigits) {
