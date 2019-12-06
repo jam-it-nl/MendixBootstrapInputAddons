@@ -169,7 +169,7 @@ define([
 
                 var value = this._getFormattedValueFromContextObject(this.fieldAttribute);
                 this.inputNode.value = value;
- 
+
                 var originalValue = this._contextObj.get(this.fieldAttribute);
                 if (originalValue < 0) {
                     dojoClass.add(this.formGroupNode, this.negativeClass);
@@ -189,14 +189,14 @@ define([
                 }
 
                 dojoClass.add(this.inputDiv, this._getInputDivClass());
-                
-                if (this._contextObj.getAttributeType(this.fieldAttribute) === "Enum" && this._isEditable()){
-                    if (this.showEnumAs === "radio"){
+
+                if (this._contextObj.getAttributeType(this.fieldAttribute) === "Enum" && this._isEditable()) {
+                    if (this.showEnumAs === "radio") {
                         this._addEnumAsRadio();
-                    }else {
+                    } else {
                         this._addEnumAsDropDown();
                     }
-                }else if (this._contextObj.getAttributeType(this.fieldAttribute) === "Boolean" && this._isEditable() && this.formOrientation == "horizontal"){
+                } else if (this._contextObj.getAttributeType(this.fieldAttribute) === "Boolean" && this._isEditable() && this.formOrientation == "horizontal") {
                     dojoClass.add(this.inputDiv, "checkbox");
                     dojoConstruct.place(this._labelNode, this.inputNodes, "first");
                     dojoConstruct.place(this.inputNode, this._labelNode, "first");
@@ -205,26 +205,26 @@ define([
                     dojoAttr.remove(this.inputNode, "value");
 
                     dojoClass.remove(this._labelNode, this._getLabelClass());
-                    dojoClass.add(this._labelNode, "control-label");                    
+                    dojoClass.add(this._labelNode, "control-label");
                     dojoClass.add(this.inputDiv, this._getInputDivOffsetClass());
 
                     dojoStyle.set(this._toolTipNode, "display", "inline");
                     dojoStyle.set(this._toolTipNode, "vertical-align", "unset");
 
                     this.inputNode.checked = originalValue;
-                    
-                }else{
-                	if (!this._isEditable() && this.readOnlyMode == "textControl") {
-	                    dojoAttr.set(this.inputNode, "disabled", "disabled");
-	                }
-	
-	                if (!this._isEmptyString(this.placeholderText)) {
-	                    dojoAttr.set(this.inputNode, "placeholder", this.placeholderText);
-	                }
-	
-	                if (!this._isEditable() && this.readOnlyMode == "textLabel") {
-	                    this._setReadOnlyValue(value);
-	                }
+
+                } else {
+                    if (!this._isEditable() && this.readOnlyMode == "textControl") {
+                        dojoAttr.set(this.inputNode, "disabled", "disabled");
+                    }
+
+                    if (!this._isEmptyString(this.placeholderText)) {
+                        dojoAttr.set(this.inputNode, "placeholder", this.placeholderText);
+                    }
+
+                    if (!this._isEditable() && this.readOnlyMode == "textLabel") {
+                        this._setReadOnlyValue(value);
+                    }
                 }
 
             } else {
@@ -263,32 +263,32 @@ define([
             return mx.parser.formatAttribute(this._contextObj, attribute);
         },
 
-        _getUnformattedValue: function (attribute, formattedValue) {      	
-        	if (typeof formattedValue !== 'undefined' && (typeof formattedValue === 'string' || formattedValue instanceof String) && this._contextObj.isNumeric(attribute)){
-        		// Remove thousand separators
-        		formattedValue = formattedValue.replace(new RegExp('\\' + this._getThousandSeparator(), 'g'), '')
+        _getUnformattedValue: function (attribute, formattedValue) {
+            if (typeof formattedValue !== 'undefined' && (typeof formattedValue === 'string' || formattedValue instanceof String) && this._contextObj.isNumeric(attribute)) {
+                // Remove thousand separators
+                formattedValue = formattedValue.replace(new RegExp('\\' + this._getThousandSeparator(), 'g'), '')
             }
-            
-            if (this._contextObj.getAttributeType(this.fieldAttribute) === "Boolean"){
+
+            if (this._contextObj.getAttributeType(this.fieldAttribute) === "Boolean") {
                 return formattedValue;
             }
-        	      	
+
             return mx.parser.parseValue(formattedValue, this._contextObj.getAttributeType(attribute));
         },
-        
-        _getThousandSeparator: function () {       	
-        	try {
-        		const numberWithGroupAndDecimalSeparator = 1000.1;
-                return Intl.NumberFormat(mx.session.sessionData.locale.code.replace('_','-'))
+
+        _getThousandSeparator: function () {
+            try {
+                const numberWithGroupAndDecimalSeparator = 1000.1;
+                return Intl.NumberFormat(mx.session.sessionData.locale.code.replace('_', '-'))
                     .formatToParts(numberWithGroupAndDecimalSeparator)
-                    .find(function(part){return part.type === 'group'})
+                    .find(function (part) { return part.type === 'group' })
                     .value;
             } catch (exception) {
-                if (mx.session.sessionData.locale.code === 'nl_NL'){
-                	return '.';
+                if (mx.session.sessionData.locale.code === 'nl_NL') {
+                    return '.';
                 }
                 return ',';
-            }   
+            }
         },
 
         _setValueInContextObject: function (attribute, formattedValue) {
@@ -306,9 +306,9 @@ define([
 
             this._addSingleOption("", "", this.inputNode);
             var enumMap = this._contextObj.getEnumMap(this.fieldAttribute);
-        	for (var i = 0; i < enumMap.length; i++) {
+            for (var i = 0; i < enumMap.length; i++) {
                 var key = enumMap[i].key;
-                if (!this._isEmptyString(this.hideEnumregEx)){
+                if (!this._isEmptyString(this.hideEnumregEx)) {
                     var regExp = new RegExp(this.hideEnumregEx);
                     if (regExp.test(key)) {
                         continue;
@@ -316,7 +316,7 @@ define([
                 }
                 this._addSingleOption(enumMap[i].caption, key, this.inputNode);
             }
-            
+
             this.inputNode.value = this._contextObj.get(this.fieldAttribute);
 
             this.connect(this.inputNode, "change", function (event) {
@@ -324,49 +324,49 @@ define([
             });
         },
 
-        _addSingleOption: function(text, key, node) {
+        _addSingleOption: function (text, key, node) {
             dojoConstruct.create("option", {
-                    "innerHTML": text,
-                    "value": key
-                }, node);
+                "innerHTML": text,
+                "value": key
+            }, node);
         },
-        
+
         _addEnumAsRadio: function () {
-        	dojoAttr.set(this.inputNodes, "role", "radiogroup");
-        	dojoConstruct.empty(this.inputNodes);
-        	
-        	var enumMap = this._contextObj.getEnumMap(this.fieldAttribute);
-        	var inputTypeName = Math.floor((Math.random() * 1000000));
-        	var arrayLength = enumMap.length;
-        	for (var i = 0; i < arrayLength; i++) {
-        	    
-        	    
-        	    var radioDiv = dojoConstruct.create("div", {
+            dojoAttr.set(this.inputNodes, "role", "radiogroup");
+            dojoConstruct.empty(this.inputNodes);
+
+            var enumMap = this._contextObj.getEnumMap(this.fieldAttribute);
+            var inputTypeName = Math.floor((Math.random() * 1000000));
+            var arrayLength = enumMap.length;
+            for (var i = 0; i < arrayLength; i++) {
+
+
+                var radioDiv = dojoConstruct.create("div", {
                     "class": "radio"
                 });
-        	    
-        	    var radioLabel = dojoConstruct.create("label", {
-        	    	"innerHTML": enumMap[i].caption
-        	    });
-        	    var radioInput = dojoConstruct.create("input", {
-        	    	"type": "radio",
-        	    	"name": inputTypeName,
-        	    	"value": enumMap[i].key
+
+                var radioLabel = dojoConstruct.create("label", {
+                    "innerHTML": enumMap[i].caption
                 });
-        	    
-        	    if (this._contextObj.get(this.fieldAttribute) === enumMap[i].key){
-        	    	dojoAttr.set(radioInput, "checked", "checked");
-        	    }
-        	    
-        	    dojoConstruct.place(radioInput, radioLabel, 'first');
-        	    dojoConstruct.place(radioLabel, radioDiv);
-        	    dojoConstruct.place(radioDiv, this.inputNodes);
-        	    
-        	    this.connect(radioInput, "change", function (event) {
+                var radioInput = dojoConstruct.create("input", {
+                    "type": "radio",
+                    "name": inputTypeName,
+                    "value": enumMap[i].key
+                });
+
+                if (this._contextObj.get(this.fieldAttribute) === enumMap[i].key) {
+                    dojoAttr.set(radioInput, "checked", "checked");
+                }
+
+                dojoConstruct.place(radioInput, radioLabel, 'first');
+                dojoConstruct.place(radioLabel, radioDiv);
+                dojoConstruct.place(radioDiv, this.inputNodes);
+
+                this.connect(radioInput, "change", function (event) {
                     this._onChange(event);
                 });
-        	    
-        	}            
+
+            }
         },
 
         _addLabel: function () {
@@ -525,7 +525,6 @@ define([
 
         // Handle validations.
         _handleValidation: function (validations) {
-            logger.debug(this.id + "._handleValidation");
             this._clearValidations();
 
             var validation = validations[0],
@@ -538,21 +537,19 @@ define([
         },
 
         _isValidationShown: function () {
-            logger.debug(this.id + "._isValidationShown");
             return (this._alertDiv != null);
         },
 
         // Clear validations.
         _clearValidations: function () {
-            logger.debug(this.id + "._clearValidations");
             dojoConstruct.destroy(this._alertDiv);
             this._alertDiv = null;
             dojoClass.remove(this.inputDiv, "has-error");
+            dojoClass.remove(this.formGroupNode, "parent-error");
         },
 
         // Show an error message.
         _showError: function (message) {
-            logger.debug(this.id + "._showError");
             if (this._alertDiv !== null) {
                 dojoHtml.set(this._alertDiv, message);
                 return true;
@@ -563,39 +560,37 @@ define([
             });
             dojoConstruct.place(this._alertDiv, this.inputDiv, "last");
             dojoClass.add(this.inputDiv, "has-error");
+            dojoClass.add(this.formGroupNode, "parent-error");
         },
-        
+
         _getCurrentValue: function () {
-            if (this._contextObj.getAttributeType(this.fieldAttribute) === "Enum" && this._isEditable() && this.showEnumAs === "radio"){
-            	for (var i = 0; i < this.inputNodes.children.length; i++) { 
-            		var element = this.inputNodes.children[i];
-            		var radioElement = element.firstElementChild.firstElementChild;
-            		if (radioElement.checked){
-            			return radioElement.value;
-            		}
-            	}
+            if (this._contextObj.getAttributeType(this.fieldAttribute) === "Enum" && this._isEditable() && this.showEnumAs === "radio") {
+                for (var i = 0; i < this.inputNodes.children.length; i++) {
+                    var element = this.inputNodes.children[i];
+                    var radioElement = element.firstElementChild.firstElementChild;
+                    if (radioElement.checked) {
+                        return radioElement.value;
+                    }
+                }
             }
 
-            if (this._contextObj.getAttributeType(this.fieldAttribute) === "Boolean" && this._isEditable() && this.formOrientation == "horizontal"){
+            if (this._contextObj.getAttributeType(this.fieldAttribute) === "Boolean" && this._isEditable() && this.formOrientation == "horizontal") {
                 return this.inputNode.checked;
             }
-            
+
             var currentValue = this.inputNode.value;
             return currentValue;
         },
 
         // Check if validates
         _isValid: function () {
-            logger.debug(this.id + "._isValid " + this.fieldAttribute);
-
             var value = this._getCurrentValue();
 
-            if (this._isEditable() && this.inputNode) {                
+            if (this._isEditable() && this.inputNode) {
 
                 // Check for required
                 if (this.isRequired) {
                     if (this._isEmptyString(value)) {
-                        logger.debug(this.id + "._isValid required false");
 
                         this._validationMessage = this.requiredMessage;
                         return false;
@@ -624,11 +619,10 @@ define([
                 }
 
                 if (!isValidNumber) {
-                    logger.debug(this.id + "._isValid number false");
 
-                    if (mx.session.sessionData.locale.code == "nl_NL"){
+                    if (mx.session.sessionData.locale.code == "nl_NL") {
                         this._validationMessage = "Ongeldig nummer";
-                    }else {
+                    } else {
                         this._validationMessage = "Invalid number";
                     }
                     return false;
@@ -645,7 +639,6 @@ define([
 
         // Add a validation.
         _addValidation: function (message) {
-            logger.debug(this.id + "._addValidation");
             this._showError(message);
         },
 
@@ -670,26 +663,29 @@ define([
 
         // FieldEvent: onEnter
         _onEnter: function () {
-            logger.debug(this.id + "._onEnter");
+            if (this._leftAddonSpan) {
+                dojoClass.add(this._leftAddonSpan, "focus");
+            }
             // Call "on change" microflow
             this._callMicroflow(this.onEnter);
+
         },
 
         // FieldEvent: onLeave
         _onLeave: function () {
-            logger.debug(this.id + "._onLeave");
+            if (this._leftAddonSpan) {
+                dojoClass.remove(this._leftAddonSpan, "focus");
+            }
             // Call "on change" microflow
             this._callMicroflow(this.onLeave);
         },
 
         // FieldEvent: onLeave
         _onClick: function () {
-            logger.debug(this.id + ".onClick");
             this._callMicroflow(this.onClick);
         },
 
         _callMicroflow: function (microflow) {
-            logger.debug(this.id + "._callMicroflow");
             if (microflow) {
                 mx.ui.action(microflow, {
                     params: {
@@ -731,7 +727,6 @@ define([
 
         // Reset subscriptions.
         _resetSubscriptions: function () {
-            logger.debug(this.id + "._resetSubscriptions");
             // Release handles on previous object, if any.
             this.unsubscribeAll();
 
@@ -742,7 +737,6 @@ define([
             // When a mendix object exists and is visible create subscribtions.
             if (this._contextObj && this._isVisible()) {
                 this._formValidateListener = this.mxform.listen("validate", dojoLang.hitch(this, function (callback, error) {
-                    logger.debug(this.id + ".validate");
                     if (this._isValid()) {
                         callback();
                     } else {
