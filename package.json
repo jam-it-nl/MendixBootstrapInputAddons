@@ -8,7 +8,7 @@
   "dependencies": {
     "mendixmodelsdk": "^4.20.0",
     "mendixplatformsdk": "^4.1.0",
-    "npm": "^6.9.0",
+    "npm": "^6.13.4",
     "when": "^3.7.8"
   },
   "devDependencies": {
