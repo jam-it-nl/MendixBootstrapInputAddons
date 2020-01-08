@@ -79,6 +79,7 @@ define([
         mfToExecute: "",
         messageString: "",
         fieldAttribute: "",
+        radioOrientation: "",
 
         onChange: "",
         onChangeAbortOnValidationErrors: "",
@@ -334,6 +335,10 @@ define([
         _addEnumAsRadio: function () {
             dojoAttr.set(this.inputNodes, "role", "radiogroup");
             dojoConstruct.empty(this.inputNodes);
+
+            if (this.radioOrientation === 'horizontal') {
+                dojoAttr.set(this.inputNodes, 'class', 'radiogroup');
+            }
 
             var enumMap = this._contextObj.getEnumMap(this.fieldAttribute);
             var inputTypeName = Math.floor((Math.random() * 1000000));
