@@ -51,6 +51,15 @@
             <category>Appearance</category>
             <description>Hide enum values matching regular expression</description>
         </property>
+        <property defaultValue="horizontal" key="radioOrientation" type="enumeration">
+            <caption>Radio orientation</caption>
+            <category>Appearance</category>
+            <description></description>
+            <enumerationValues>
+                <enumerationValue key="vertical">Vertical</enumerationValue>
+                <enumerationValue key="horizontal">Horizontal</enumerationValue>
+            </enumerationValues>
+        </property>
         <property defaultValue="" key="placeholderText" required="false" type="string">
             <caption>Placeholder text</caption>
             <category>Appearance</category>
