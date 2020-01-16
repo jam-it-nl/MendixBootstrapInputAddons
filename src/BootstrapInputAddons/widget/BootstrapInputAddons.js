@@ -487,11 +487,11 @@ define([
         _setReadOnlyValue: function (value) {
 
             if (this.showLeftAddon) {
-                value = this.leftAddonCaption + " " + value;
+                value = this.leftAddonCaption + value;
             }
 
             if (this.showRightAddon) {
-                value = value + " " + this.rightAddonCaption;
+                value = value + this.rightAddonCaption;
             }
 
             if (this.showLabel) {
