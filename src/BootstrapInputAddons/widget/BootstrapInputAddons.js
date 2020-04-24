@@ -344,7 +344,13 @@ define([
             var inputTypeName = Math.floor((Math.random() * 1000000));
             var arrayLength = enumMap.length;
             for (var i = 0; i < arrayLength; i++) {
-
+                var key = enumMap[i].key;
+                if (!this._isEmptyString(this.hideEnumregEx)) {
+                    var regExp = new RegExp(this.hideEnumregEx);
+                    if (regExp.test(key)) {
+                        continue;
+                    }
+                }
 
                 var radioDiv = dojoConstruct.create("div", {
                     "class": "radio"
