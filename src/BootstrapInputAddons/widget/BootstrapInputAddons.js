@@ -167,6 +167,7 @@ define([
         _updateRendering: function () {
             if (this._isVisible()) {
                 dojoStyle.set(this.domNode, "display", "block");
+                dojoStyle.set(this.inputDiv, "display", "block");
 
                 var value = this._getFormattedValueFromContextObject(this.fieldAttribute);
                 this.inputNode.value = value;
