@@ -28,6 +28,10 @@ For any request or bug please create an issue at [GitHub](https://github.com/JAM
 * npm install
 * gulp
 
+## Build
+docker run -v "$PWD":/usr/src/app -w /usr/src/app node:10.22 npm install
+docker run -v "$PWD":/usr/src/app -w /usr/src/app node:10.22 npm run build
+
 # Update dependencies
 * npm install mendixmodelsdk mendixplatformsdk when --save
 * npm install del gulp gulp-if gulp-intercept gulp-json-transform gulp-jsvalidate gulp-newer gulp-plumber gulp-util gulp-zip widgetbuilder-gulp-helper yargs --save-dev
