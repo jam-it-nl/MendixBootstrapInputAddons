@@ -26,7 +26,8 @@
     "yargs": "^6.6.0"
   },
   "engines": {
-    "node": ">=5"
+    "node": "10.15.3",
+    "npm": "6.9.0"
   },
   "generatorVersion": "2.2.3",
   "paths": {

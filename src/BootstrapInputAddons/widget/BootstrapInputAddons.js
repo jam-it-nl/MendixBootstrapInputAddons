@@ -46,7 +46,7 @@ define([
         inputNode: null,
         formGroupNode: null,
 
-        // Parameters configured in the Modeler.\
+        // Parameters configured in the Modeler.
         hideEnumregEx: "",
         showEnumAs: "",
         formOrientation: "",
@@ -662,8 +662,6 @@ define([
             if (this.onChangeAbortOnValidationErrors == "no" || isValid) {
                 // Set attribute value
                 this._setValueInContextObject(this.fieldAttribute, this._getCurrentValue());
-
-                // Call "on change" microflow
                 this._callMicroflow(this.onChange);
             } else {
                 if (!isValid) {
@@ -678,7 +676,17 @@ define([
             if (this._leftAddonSpan) {
                 dojoClass.add(this._leftAddonSpan, "focus");
             }
-            // Call "on change" microflow
+
+            if (this._contextObj.isNumeric(this.fieldAttribute) || this._contextObj.getAttributeType(this.fieldAttribute) === "AutoNumber") {
+                try {
+                    if (parseInt(this.inputNode.value) === 0){
+                        this.inputNode.select();
+                    }
+                } catch (exception) {
+                    // ignore, maybe not an int
+                }
+            }
+
             this._callMicroflow(this.onEnter);
 
         },
@@ -688,7 +696,6 @@ define([
             if (this._leftAddonSpan) {
                 dojoClass.remove(this._leftAddonSpan, "focus");
             }
-            // Call "on change" microflow
             this._callMicroflow(this.onLeave);
         },
 

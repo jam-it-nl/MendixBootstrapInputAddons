@@ -26,9 +26,11 @@ For any request or bug please create an issue at [GitHub](https://github.com/JAM
 
 # Build project
 * npm install
+* npm run build
 * gulp
 
-## Build
+## Build project with docker
+rm -rf node_modules && rm -rf package-lock.json && docker run -v "$PWD":/usr/src/app -w /usr/src/app node:10.22 npm install && npm install gulp@^3.9.1 && npm run build
 docker run -v "$PWD":/usr/src/app -w /usr/src/app node:10.22 npm install
 docker run -v "$PWD":/usr/src/app -w /usr/src/app node:10.22 npm run build
 
