@@ -24,3 +24,7 @@
 .bootstrapinputaddons .radiogroup .radio input[type='radio'] + label {
     margin-left: 8px;
 }
+
+.bootstrapinputaddons > div > div > input {
+    z-index: 0 !important;
+}
