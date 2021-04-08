@@ -1,6 +1,6 @@
 {
   "name": "BootstrapInputAddons",
-  "version": "1.0.5",
+  "version": "1.0.3",
   "description": "This widget gives the possibility to use bootstrap input add-ons on normal fields.",
   "license": "Apache 2",
   "author": "Martijn Raats",
