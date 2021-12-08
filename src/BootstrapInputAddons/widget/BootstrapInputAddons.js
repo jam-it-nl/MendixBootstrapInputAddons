@@ -171,7 +171,7 @@ define([
                 } else {
                     dojoStyle.set(this.domNode, "display", "block");
                 }
-                
+
                 var value = this._getFormattedValueFromContextObject(this.fieldAttribute);
                 this.inputNode.value = value;
 
@@ -497,11 +497,11 @@ define([
         _setReadOnlyValue: function (value) {
 
             if (this.showLeftAddon) {
-                value = this.leftAddonCaption + value;
+                value = this.leftAddonCaption + ' ' + value;
             }
 
             if (this.showRightAddon) {
-                value = value + this.rightAddonCaption;
+                value = value + ' ' + this.rightAddonCaption;
             }
 
             if (this.showLabel) {
@@ -682,7 +682,7 @@ define([
 
             if (this._contextObj.isNumeric(this.fieldAttribute) || this._contextObj.getAttributeType(this.fieldAttribute) === "AutoNumber") {
                 try {
-                    if (parseInt(this.inputNode.value) === 0){
+                    if (parseInt(this.inputNode.value) === 0) {
                         this.inputNode.select();
                     }
                 } catch (exception) {
