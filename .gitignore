@@ -19,3 +19,4 @@ node_modules/
 .vscode/
 *.bak
 /.project
+test/mprcontents
